@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Recipe Book</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fdf6ec; font-family: 'Georgia', serif; color: #3d2b1f; }
+    .card { background: #fff9f2; border-radius: 16px; border: 1.5px solid #e8d5b7; transition: all 0.2s; cursor: pointer; overflow: hidden; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(120,80,40,0.13); border-color: #c9a46e; }
+    .btn { border: none; cursor: pointer; border-radius: 10px; font-family: 'Lato', sans-serif; font-weight: 700; transition: all 0.15s; }
+    .btn-primary { background: #b5621e; color: #fff9f2; padding: 10px 22px; font-size: 15px; }
+    .btn-primary:hover { background: #933f0e; }
+    .btn-ghost { background: transparent; color: #b5621e; border: 1.5px solid #b5621e; padding: 8px 18px; font-size: 14px; }
+    .btn-ghost:hover { background: #fdf0e2; }
+    .btn-danger { background: transparent; color: #c0392b; border: 1.5px solid #c0392b; padding: 8px 18px; font-size: 14px; }
+    .btn-danger:hover { background: #fff0f0; }
+    .input { width: 100%; padding: 10px 14px; border: 1.5px solid #e0c89a; border-radius: 10px; font-family: 'Lato', sans-serif; font-size: 15px; background: #fffdf8; color: #3d2b1f; outline: none; transition: border 0.15s; }
+    .input:focus { border-color: #b5621e; }
+    textarea.input { resize: vertical; min-height: 90px; }
+    .tag { display: inline-block; background: #fde8c8; color: #8b4513; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-family: 'Lato', sans-serif; margin: 2px; }
+    .fav-btn { background: none; border: none; cursor: pointer; font-size: 22px; transition: transform 0.15s; }
+    .fav-btn:hover { transform: scale(1.2); }
+    .cat-chip { background: #fde8c8; color: #7a3b10; border: none; border-radius: 20px; padding: 6px 16px; font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+    .cat-chip.active { background: #b5621e; color: #fff; }
+    .cat-chip:hover:not(.active) { background: #f9d4a0; }
+    .emoji-btn { font-size: 22px; padding: 4px 8px; background: #fde8c8; border: 1.5px solid #e0c89a; border-radius: 8px; cursor: pointer; transition: background 0.1s; }
+    .emoji-btn:hover { background: #f9d4a0; }
+    .emoji-btn.sel { border-color: #b5621e; background: #f9d4a0; }
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: #3d2b1f; color: #fdf6ec; padding: 12px 28px; border-radius: 30px; font-family: 'Lato', sans-serif; font-size: 15px; z-index: 999; animation: fadeup 0.3s ease; }
+    @keyframes fadeup { from { opacity:0; transform: translateX(-50%) translateY(12px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #fdf6ec; } ::-webkit-scrollbar-thumb { background: #d4a96a; border-radius: 3px; }
+    select.input { appearance: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const CATEGORIES = ["Breakfast","Lunch","Dinner","Dessert","Snacks","Drinks","Soups","Salads","Baking","Other"];
+    const EMOJI_LIST = ["🍎","🍋","🥧","🍝","🥗","🍲","🥞","🍕","🍜","🥘","🫕","🍱","🥩","🍗","🥦","🥕","🍳","🧁","🎂","🍰","☕","🫖","🍵","🥤","🍹","🥐","🥖","🫓","🥨","🧀","🥚","🍳","🥓","🌮","🌯","🫔","🥙","🧆"];
+    const SAMPLE_RECIPES = [
+      { id: 1, title: "Grandma's Apple Pie", category: "Dessert", tags: "sweet, classic, fall", ingredients: "6 apples, 2 cups flour, 1 cup sugar, 1/2 cup butter, cinnamon, nutmeg", instructions: "Peel and slice apples. Mix with sugar and spices. Make crust with flour and butter. Fill and bake at 375°F for 45 minutes.", favorite: true, emoji: "🍎", time: "1h 15m" },
+      { id: 2, title: "Cozy Tomato Soup", category: "Soups", tags: "warm, easy, vegetarian", ingredients: "4 tomatoes, 1 onion, 3 garlic cloves, cream, basil, olive oil", instructions: "Sauté onion and garlic. Add tomatoes and simmer 20 min. Blend smooth, stir in cream, season and serve with basil.", favorite: false, emoji: "🍅", time: "35m" }
+    ];
+
+    const STORAGE_KEY = "myrecipebook_recipes";
+
+    function App() {
+      const [recipes, setRecipes] = useState([]);
+      const [view, setView] = useState("grid");
+      const [selected, setSelected] = useState(null);
+      const [search, setSearch] = useState("");
+      const [filterCat, setFilterCat] = useState("All");
+      const [filterFav, setFilterFav] = useState(false);
+      const [form, setForm] = useState({ title: "", category: "Dinner", tags: "", ingredients: "", instructions: "", emoji: "🍽️", time: "", favorite: false });
+      const [toast, setToast] = useState(null);
+
+      useEffect(() => {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          setRecipes(saved ? JSON.parse(saved) : SAMPLE_RECIPES);
+        } catch { setRecipes(SAMPLE_RECIPES); }
+      }, []);
+
+      useEffect(() => {
+        if (recipes.length > 0 || localStorage.getItem(STORAGE_KEY)) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes)); } catch {}
+        }
+      }, [recipes]);
+
+      const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
+
+      const filtered = recipes.filter(r => {
+        const q = search.toLowerCase();
+        return (!q || r.title.toLowerCase().includes(q) || r.tags.toLowerCase().includes(q) || r.ingredients.toLowerCase().includes(q))
+          && (filterCat === "All" || r.category === filterCat)
+          && (!filterFav || r.favorite);
+      });
+
+      const toggleFav = (id) => {
+        setRecipes(rs => rs.map(r => r.id === id ? { ...r, favorite: !r.favorite } : r));
+        if (selected?.id === id) setSelected(s => ({ ...s, favorite: !s.favorite }));
+      };
+
+      const deleteRecipe = (id) => { setRecipes(rs => rs.filter(r => r.id !== id)); setView("grid"); setSelected(null); showToast("Recipe deleted"); };
+
+      const saveRecipe = () => {
+        if (!form.title.trim()) return;
+        if (view === "edit") {
+          const updated = { ...selected, ...form };
+          setRecipes(rs => rs.map(r => r.id === selected.id ? updated : r));
+          setSelected(updated); setView("detail"); showToast("Recipe updated! ✨");
+        } else {
+          setRecipes(rs => [{ ...form, id: Date.now() }, ...rs]);
+          setView("grid"); showToast("Recipe added! 🎉");
+        }
+      };
+
+      const openAdd = () => { setForm({ title: "", category: "Dinner", tags: "", ingredients: "", instructions: "", emoji: "🍽️", time: "", favorite: false }); setView("add"); };
+      const openEdit = () => { setForm({ ...selected }); setView("edit"); };
+      const openDetail = (r) => { setSelected(r); setView("detail"); };
+
+      return (
+        <div style={{ minHeight: "100vh", background: "#fdf6ec" }}>
+          {/* Header */}
+          <div style={{ background: "#3d2b1f", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 12px rgba(61,43,31,0.18)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: 32 }}>📖</span>
+              <div>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: "#fde8c8", lineHeight: 1 }}>My Recipe Book</div>
+                <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 12, color: "#c9a46e", marginTop: 2 }}>{recipes.length} recipes saved</div>
+              </div>
+            </div>
+            <button className="btn btn-primary" onClick={openAdd} style={{ fontSize: 14, padding: "9px 16px" }}>+ Add Recipe</button>
+          </div>
+
+          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px" }}>
+
+            {/* Grid */}
+            {view === "grid" && <>
+              <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+                <input className="input" style={{ flex: 1, minWidth: 180 }} placeholder="🔍  Search recipes, ingredients, tags..." value={search} onChange={e => setSearch(e.target.value)} />
+                <button className={`btn ${filterFav ? "btn-primary" : "btn-ghost"}`} onClick={() => setFilterFav(f => !f)}>❤️ Favorites</button>
+              </div>
+              <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 24 }}>
+                {["All", ...CATEGORIES].map(c => <button key={c} className={`cat-chip ${filterCat === c ? "active" : ""}`} onClick={() => setFilterCat(c)}>{c}</button>)}
+              </div>
+              {filtered.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "60px 0", color: "#b5914a" }}>
+                  <div style={{ fontSize: 56 }}>🍽️</div>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, margin: "12px 0 6px" }}>No recipes found</div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15 }}>Try a different search or add a new recipe!</div>
+                </div>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 20 }}>
+                  {filtered.map(r => (
+                    <div key={r.id} className="card" onClick={() => openDetail(r)} style={{ padding: "20px 18px 16px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: 40 }}>{r.emoji || "🍽️"}</span>
+                        <button className="fav-btn" onClick={e => { e.stopPropagation(); toggleFav(r.id); }}>{r.favorite ? "❤️" : "🤍"}</button>
+                      </div>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, margin: "10px 0 6px", lineHeight: 1.2 }}>{r.title}</div>
+                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                        <span className="tag" style={{ background: "#f9d4a0" }}>📂 {r.category}</span>
+                        {r.time && <span className="tag">⏱ {r.time}</span>}
+                      </div>
+                      <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#8b6f47", lineHeight: 1.5, marginBottom: 8, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{r.ingredients}</div>
+                      {r.tags && <div>{r.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag">{t.trim()}</span>)}</div>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>}
+
+            {/* Detail */}
+            {view === "detail" && selected && (
+              <div style={{ maxWidth: 700, margin: "0 auto" }}>
+                <button className="btn btn-ghost" onClick={() => setView("grid")} style={{ marginBottom: 20 }}>← Back</button>
+                <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "32px 28px 28px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 60 }}>{selected.emoji || "🍽️"}</span>
+                    <button className="fav-btn" style={{ fontSize: 28 }} onClick={() => toggleFav(selected.id)}>{selected.favorite ? "❤️" : "🤍"}</button>
+                  </div>
+                  <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, margin: "12px 0 8px" }}>{selected.title}</h1>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+                    <span className="tag" style={{ background: "#f9d4a0", fontSize: 13 }}>📂 {selected.category}</span>
+                    {selected.time && <span className="tag" style={{ fontSize: 13 }}>⏱ {selected.time}</span>}
+                    {selected.tags && selected.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag" style={{ fontSize: 13 }}>{t.trim()}</span>)}
+                  </div>
+                  <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 18 }}>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, marginBottom: 10, color: "#8b4513" }}>🧺 Ingredients</div>
+                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a3020", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>{selected.ingredients}</div>
+                  </div>
+                  <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 26 }}>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, marginBottom: 10, color: "#8b4513" }}>📝 Instructions</div>
+                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a3020", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{selected.instructions}</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button className="btn btn-primary" onClick={openEdit}>✏️ Edit</button>
+                    <button className="btn btn-danger" onClick={() => deleteRecipe(selected.id)}>🗑 Delete</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Add / Edit Form */}
+            {(view === "add" || view === "edit") && (
+              <div style={{ maxWidth: 680, margin: "0 auto" }}>
+                <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")} style={{ marginBottom: 20 }}>← Back</button>
+                <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "28px 24px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, margin: "0 0 22px" }}>{view === "edit" ? "✏️ Edit Recipe" : "✨ New Recipe"}</h2>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>RECIPE NAME *</label>
+                    <input className="input" placeholder="e.g. Mom's Chicken Soup" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                    <div>
+                      <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>CATEGORY</label>
+                      <select className="input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+                        {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>COOK TIME</label>
+                      <input className="input" placeholder="e.g. 45m" value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} />
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 8 }}>PICK AN EMOJI</label>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                      {EMOJI_LIST.map(e => <button key={e} className={`emoji-btn ${form.emoji === e ? "sel" : ""}`} onClick={() => setForm(f => ({ ...f, emoji: e }))}>{e}</button>)}
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>TAGS (comma-separated)</label>
+                    <input className="input" placeholder="e.g. easy, vegetarian, comfort food" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} />
+                  </div>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>INGREDIENTS</label>
+                    <textarea className="input" placeholder="List your ingredients..." value={form.ingredients} onChange={e => setForm(f => ({ ...f, ingredients: e.target.value }))} />
+                  </div>
+                  <div style={{ marginBottom: 20 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>INSTRUCTIONS</label>
+                    <textarea className="input" style={{ minHeight: 120 }} placeholder="Step by step instructions..." value={form.instructions} onChange={e => setForm(f => ({ ...f, instructions: e.target.value }))} />
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
+                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 14, color: "#3d2b1f", display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                      <input type="checkbox" checked={form.favorite} onChange={e => setForm(f => ({ ...f, favorite: e.target.checked }))} style={{ width: 17, height: 17, accentColor: "#b5621e" }} />
+                      ❤️ Mark as favorite
+                    </label>
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button className="btn btn-primary" onClick={saveRecipe} style={{ fontSize: 15, padding: "11px 26px" }}>{view === "edit" ? "Save Changes" : "Add Recipe"}</button>
+                    <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {toast && <div className="toast">{toast}</div>}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
