@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -22,234 +23,497 @@
     .btn-danger:hover { background: #fff0f0; }
     .input { width: 100%; padding: 10px 14px; border: 1.5px solid #e0c89a; border-radius: 10px; font-family: 'Lato', sans-serif; font-size: 15px; background: #fffdf8; color: #3d2b1f; outline: none; transition: border 0.15s; }
     .input:focus { border-color: #b5621e; }
-    textarea.input { resize: vertical; min-height: 90px; }
+    textarea.input { resize: vertical; min-height: 70px; }
     .tag { display: inline-block; background: #fde8c8; color: #8b4513; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-family: 'Lato', sans-serif; margin: 2px; }
     .fav-btn { background: none; border: none; cursor: pointer; font-size: 22px; transition: transform 0.15s; }
     .fav-btn:hover { transform: scale(1.2); }
     .cat-chip { background: #fde8c8; color: #7a3b10; border: none; border-radius: 20px; padding: 6px 16px; font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
     .cat-chip.active { background: #b5621e; color: #fff; }
     .cat-chip:hover:not(.active) { background: #f9d4a0; }
-    .emoji-btn { font-size: 22px; padding: 4px 8px; background: #fde8c8; border: 1.5px solid #e0c89a; border-radius: 8px; cursor: pointer; transition: background 0.1s; }
-    .emoji-btn:hover { background: #f9d4a0; }
+    .emoji-btn { font-size: 22px; padding: 4px 8px; background: #fde8c8; border: 1.5px solid #e0c89a; border-radius: 8px; cursor: pointer; }
     .emoji-btn.sel { border-color: #b5621e; background: #f9d4a0; }
     .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: #3d2b1f; color: #fdf6ec; padding: 12px 28px; border-radius: 30px; font-family: 'Lato', sans-serif; font-size: 15px; z-index: 999; animation: fadeup 0.3s ease; }
     @keyframes fadeup { from { opacity:0; transform: translateX(-50%) translateY(12px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #fdf6ec; } ::-webkit-scrollbar-thumb { background: #d4a96a; border-radius: 3px; }
     select.input { appearance: none; }
+    .unit-toggle { display: flex; background: #fde8c8; border-radius: 30px; padding: 3px; gap: 2px; }
+    .unit-toggle button { border: none; border-radius: 24px; padding: 6px 16px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; background: transparent; color: #8b4513; transition: all 0.15s; }
+    .unit-toggle button.active { background: #b5621e; color: #fff; }
+    .ing-list-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f0dfc0; font-family: 'Lato', sans-serif; font-size: 15px; }
+    .ing-list-item:last-child { border-bottom: none; }
+    .ing-bullet { width: 8px; height: 8px; background: #b5621e; border-radius: 50%; flex-shrink: 0; }
+    .step-display { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+    .step-num-display { background: #b5621e; color: #fff; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+    .remove-btn { background: none; border: none; cursor: pointer; color: #c0392b; font-size: 20px; padding: 2px 6px; border-radius: 6px; line-height: 1; }
+    .remove-btn:hover { background: #fff0f0; }
+    .add-row-btn { background: #fde8c8; border: 1.5px dashed #c9a46e; color: #8b4513; border-radius: 8px; padding: 7px 16px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 6px; }
+    .add-row-btn:hover { background: #f9d4a0; }
+    .step-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+    .step-num-edit { background: #b5621e; color: #fff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 10px; }
+    .import-box { background: linear-gradient(135deg, #fff8f0, #fdecd8); border: 2px solid #e0b97a; border-radius: 14px; padding: 20px; margin-bottom: 22px; }
+    .import-box h3 { font-family: 'Playfair Display', serif; font-size: 17px; color: #7b3f00; margin-bottom: 10px; }
+    .import-row { display: flex; gap: 8px; }
+    .importing-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff9f2; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 6px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .source-link { display: inline-flex; align-items: center; gap: 6px; background: #fde8c8; color: #7b3f00; border-radius: 8px; padding: 6px 14px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; text-decoration: none; border: 1px solid #e0c89a; transition: background 0.15s; }
+    .source-link:hover { background: #f9d4a0; }
+    .form-label { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 12px; color: #8b4513; display: block; margin-bottom: 6px; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
 
-    const CATEGORIES = ["Breakfast","Lunch","Dinner","Dessert","Snacks","Drinks","Soups","Salads","Baking","Other"];
-    const EMOJI_LIST = ["🍎","🍋","🥧","🍝","🥗","🍲","🥞","🍕","🍜","🥘","🫕","🍱","🥩","🍗","🥦","🥕","🍳","🧁","🎂","🍰","☕","🫖","🍵","🥤","🍹","🥐","🥖","🫓","🥨","🧀","🥚","🍳","🥓","🌮","🌯","🫔","🥙","🧆"];
-    const SAMPLE_RECIPES = [
-      { id: 1, title: "Grandma's Apple Pie", category: "Dessert", tags: "sweet, classic, fall", ingredients: "6 apples, 2 cups flour, 1 cup sugar, 1/2 cup butter, cinnamon, nutmeg", instructions: "Peel and slice apples. Mix with sugar and spices. Make crust with flour and butter. Fill and bake at 375°F for 45 minutes.", favorite: true, emoji: "🍎", time: "1h 15m" },
-      { id: 2, title: "Cozy Tomato Soup", category: "Soups", tags: "warm, easy, vegetarian", ingredients: "4 tomatoes, 1 onion, 3 garlic cloves, cream, basil, olive oil", instructions: "Sauté onion and garlic. Add tomatoes and simmer 20 min. Blend smooth, stir in cream, season and serve with basil.", favorite: false, emoji: "🍅", time: "35m" }
-    ];
+```
+const CATEGORIES = ["Breakfast","Lunch","Dinner","Dessert","Snacks","Drinks","Soups","Salads","Baking","Sourdough","Other"];
+const EMOJI_LIST = ["🍞","🥖","🫓","🍎","🍋","🥧","🍝","🥗","🍲","🥞","🍕","🍜","🥘","🫕","🍱","🥩","🍗","🥦","🥕","🍳","🧁","🎂","🍰","☕","🫖","🍵","🥤","🍹","🥐","🥨","🧀","🥚","🥓","🌮","🌯","🧆"];
+const CUP_UNITS = ["cup","tbsp","tsp","oz","lb","pinch","to taste","whole","slice","clove","handful"];
+const GRAM_UNITS = ["g","kg","ml","L","pinch","to taste","whole","slice","clove","handful"];
+const STORAGE_KEY = "myrecipebook_v3";
 
-    const STORAGE_KEY = "myrecipebook_recipes";
+const SAMPLE_RECIPES = [
+  {
+    id: 1, title: "Grandma's Apple Pie", category: "Dessert", tags: "sweet, classic, fall", sourceUrl: "",
+    ingredients: [
+      { name: "Apples", cups: "6", cupsUnit: "whole", grams: "900", gramsUnit: "g" },
+      { name: "Flour", cups: "2", cupsUnit: "cup", grams: "240", gramsUnit: "g" },
+      { name: "Sugar", cups: "1", cupsUnit: "cup", grams: "200", gramsUnit: "g" },
+      { name: "Butter", cups: "1/2", cupsUnit: "cup", grams: "113", gramsUnit: "g" },
+      { name: "Cinnamon", cups: "1", cupsUnit: "tsp", grams: "2.5", gramsUnit: "g" },
+    ],
+    steps: [
+      "Peel and slice apples. Toss with sugar and cinnamon.",
+      "Make crust: combine flour and cold butter until crumbly. Add ice water until dough forms.",
+      "Roll out half the dough and line a 9-inch pie dish.",
+      "Fill with apple mixture. Top with remaining dough and crimp edges.",
+      "Bake at 375°F for 45 minutes until golden brown."
+    ],
+    favorite: true, emoji: "🍎", time: "1h 15m"
+  },
+  {
+    id: 2, title: "Classic Sourdough Loaf", category: "Sourdough", tags: "bread, fermented, crusty", sourceUrl: "",
+    ingredients: [
+      { name: "Bread flour", cups: "4", cupsUnit: "cup", grams: "500", gramsUnit: "g" },
+      { name: "Water", cups: "1⅓", cupsUnit: "cup", grams: "375", gramsUnit: "ml" },
+      { name: "Active starter", cups: "½", cupsUnit: "cup", grams: "100", gramsUnit: "g" },
+      { name: "Salt", cups: "1¾", cupsUnit: "tsp", grams: "10", gramsUnit: "g" }
+    ],
+    steps: [
+      "Mix flour and water together. Rest 30 minutes (autolyse).",
+      "Add starter and salt. Mix well until fully incorporated.",
+      "Perform 4 sets of stretch and folds every 30 minutes over 2 hours.",
+      "Bulk ferment at room temperature 4–6 hours until risen 50%.",
+      "Shape into a boule, place in floured banneton seam-side up.",
+      "Cold proof in fridge overnight (8–16 hours).",
+      "Preheat oven with Dutch oven inside at 500°F for 1 hour.",
+      "Score the dough. Bake covered 20 min, then uncovered 20–25 min until deep brown."
+    ],
+    favorite: true, emoji: "🍞", time: "24h"
+  }
+];
 
-    function App() {
-      const [recipes, setRecipes] = useState([]);
-      const [view, setView] = useState("grid");
-      const [selected, setSelected] = useState(null);
-      const [search, setSearch] = useState("");
-      const [filterCat, setFilterCat] = useState("All");
-      const [filterFav, setFilterFav] = useState(false);
-      const [form, setForm] = useState({ title: "", category: "Dinner", tags: "", ingredients: "", instructions: "", emoji: "🍽️", time: "", favorite: false });
-      const [toast, setToast] = useState(null);
+const emptyIng = () => ({ name: "", cups: "", cupsUnit: "cup", grams: "", gramsUnit: "g" });
+const emptyForm = () => ({ title: "", category: "Dinner", tags: "", ingredients: [emptyIng()], steps: [""], emoji: "🍽️", time: "", favorite: false, sourceUrl: "" });
 
-      useEffect(() => {
-        try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          setRecipes(saved ? JSON.parse(saved) : SAMPLE_RECIPES);
-        } catch { setRecipes(SAMPLE_RECIPES); }
-      }, []);
+async function importRecipeFromUrl(url) {
+  const prompt = `You are a recipe extraction assistant. I will give you a URL. Use web search to fetch and read the content at that URL, then extract the recipe information and return it as a JSON object.
+```
 
-      useEffect(() => {
-        if (recipes.length > 0 || localStorage.getItem(STORAGE_KEY)) {
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes)); } catch {}
-        }
-      }, [recipes]);
+URL: ${url}
 
-      const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
+Return ONLY a raw JSON object (no markdown, no backticks, no explanation) with these exact fields:
+{
+“title”: “Recipe name”,
+“category”: “One of: Breakfast, Lunch, Dinner, Dessert, Snacks, Drinks, Soups, Salads, Baking, Sourdough, Other”,
+“tags”: “comma-separated tags like easy, vegetarian, quick”,
+“time”: “total time e.g. 45m or 1h 30m”,
+“emoji”: “a single relevant emoji”,
+“ingredients”: [
+{ “name”: “Ingredient name”, “cups”: “amount in cups/tbsp/tsp”, “cupsUnit”: “cup or tbsp or tsp or oz or lb or pinch or to taste or whole or slice or clove or handful”, “grams”: “amount in grams or ml”, “gramsUnit”: “g or kg or ml or L or pinch or to taste or whole or slice or clove or handful” }
+],
+“steps”: [“Step 1 text”, “Step 2 text”]
+}
 
-      const filtered = recipes.filter(r => {
-        const q = search.toLowerCase();
-        return (!q || r.title.toLowerCase().includes(q) || r.tags.toLowerCase().includes(q) || r.ingredients.toLowerCase().includes(q))
-          && (filterCat === "All" || r.category === filterCat)
-          && (!filterFav || r.favorite);
-      });
+If you cannot find a specific field, use an empty string or empty array. Convert all ingredient amounts to both cups/tbsp/tsp AND grams/ml as accurately as possible.`;
 
-      const toggleFav = (id) => {
-        setRecipes(rs => rs.map(r => r.id === id ? { ...r, favorite: !r.favorite } : r));
-        if (selected?.id === id) setSelected(s => ({ ...s, favorite: !s.favorite }));
-      };
+```
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 4000,
+      tools: [{ type: "web_search_20250305", name: "web_search" }],
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
 
-      const deleteRecipe = (id) => { setRecipes(rs => rs.filter(r => r.id !== id)); setView("grid"); setSelected(null); showToast("Recipe deleted"); };
+  const data = await response.json();
+  const text = data.content.filter(b => b.type === "text").map(b => b.text).join("");
+  const clean = text.replace(/```json|```/g, "").trim();
+  const start = clean.indexOf("{");
+  const end = clean.lastIndexOf("}");
+  if (start === -1 || end === -1) throw new Error("No JSON found");
+  return JSON.parse(clean.slice(start, end + 1));
+}
 
-      const saveRecipe = () => {
-        if (!form.title.trim()) return;
-        if (view === "edit") {
-          const updated = { ...selected, ...form };
-          setRecipes(rs => rs.map(r => r.id === selected.id ? updated : r));
-          setSelected(updated); setView("detail"); showToast("Recipe updated! ✨");
-        } else {
-          setRecipes(rs => [{ ...form, id: Date.now() }, ...rs]);
-          setView("grid"); showToast("Recipe added! 🎉");
-        }
-      };
+function App() {
+  const [recipes, setRecipes] = useState([]);
+  const [view, setView] = useState("grid");
+  const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filterCat, setFilterCat] = useState("All");
+  const [filterFav, setFilterFav] = useState(false);
+  const [form, setForm] = useState(emptyForm());
+  const [toast, setToast] = useState(null);
+  const [unitMode, setUnitMode] = useState("cups");
+  const [importUrl, setImportUrl] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState("");
 
-      const openAdd = () => { setForm({ title: "", category: "Dinner", tags: "", ingredients: "", instructions: "", emoji: "🍽️", time: "", favorite: false }); setView("add"); };
-      const openEdit = () => { setForm({ ...selected }); setView("edit"); };
-      const openDetail = (r) => { setSelected(r); setView("detail"); };
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      setRecipes(saved ? JSON.parse(saved) : SAMPLE_RECIPES);
+    } catch { setRecipes(SAMPLE_RECIPES); }
+  }, []);
 
-      return (
-        <div style={{ minHeight: "100vh", background: "#fdf6ec" }}>
-          {/* Header */}
-          <div style={{ background: "#3d2b1f", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 12px rgba(61,43,31,0.18)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 32 }}>📖</span>
-              <div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: "#fde8c8", lineHeight: 1 }}>My Recipe Book</div>
-                <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 12, color: "#c9a46e", marginTop: 2 }}>{recipes.length} recipes saved</div>
-              </div>
-            </div>
-            <button className="btn btn-primary" onClick={openAdd} style={{ fontSize: 14, padding: "9px 16px" }}>+ Add Recipe</button>
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes)); } catch {}
+  }, [recipes]);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2800); };
+
+  const handleImport = async () => {
+    if (!importUrl.trim()) return;
+    setImporting(true);
+    setImportError("");
+    try {
+      const data = await importRecipeFromUrl(importUrl.trim());
+      setForm(f => ({
+        ...emptyForm(),
+        ...data,
+        sourceUrl: importUrl.trim(),
+        ingredients: data.ingredients?.length ? data.ingredients : [emptyIng()],
+        steps: data.steps?.length ? data.steps : [""],
+        favorite: false
+      }));
+      setImportUrl("");
+      showToast("Recipe imported! Review and save ✨");
+    } catch (e) {
+      setImportError("Couldn't import that URL. Try another or fill in manually.");
+    }
+    setImporting(false);
+  };
+
+  const filtered = recipes.filter(r => {
+    const q = search.toLowerCase();
+    const ingText = (r.ingredients || []).map(i => i.name).join(" ").toLowerCase();
+    return (!q || r.title.toLowerCase().includes(q) || (r.tags||"").toLowerCase().includes(q) || ingText.includes(q))
+      && (filterCat === "All" || r.category === filterCat)
+      && (!filterFav || r.favorite);
+  });
+
+  const toggleFav = (id) => {
+    setRecipes(rs => rs.map(r => r.id === id ? { ...r, favorite: !r.favorite } : r));
+    if (selected?.id === id) setSelected(s => ({ ...s, favorite: !s.favorite }));
+  };
+
+  const deleteRecipe = (id) => { setRecipes(rs => rs.filter(r => r.id !== id)); setView("grid"); setSelected(null); showToast("Recipe deleted"); };
+
+  const saveRecipe = () => {
+    if (!form.title.trim()) { showToast("Please enter a recipe name!"); return; }
+    const cleaned = { ...form, ingredients: form.ingredients.filter(i => i.name.trim()), steps: form.steps.filter(s => s.trim()) };
+    if (view === "edit") {
+      const updated = { ...selected, ...cleaned };
+      setRecipes(rs => rs.map(r => r.id === selected.id ? updated : r));
+      setSelected(updated); setView("detail"); showToast("Recipe updated! ✨");
+    } else {
+      setRecipes(rs => [{ ...cleaned, id: Date.now() }, ...rs]);
+      setView("grid"); showToast("Recipe added! 🎉");
+    }
+  };
+
+  const openAdd = () => { setForm(emptyForm()); setImportUrl(""); setImportError(""); setView("add"); };
+  const openEdit = () => {
+    setForm({ ...selected, ingredients: selected.ingredients?.length ? selected.ingredients : [emptyIng()], steps: selected.steps?.length ? selected.steps : [""] });
+    setImportError(""); setView("edit");
+  };
+  const openDetail = (r) => { setSelected(r); setView("detail"); };
+
+  const updateIng = (idx, field, val) => setForm(f => { const ings = [...f.ingredients]; ings[idx] = { ...ings[idx], [field]: val }; return { ...f, ingredients: ings }; });
+  const addIng = () => setForm(f => ({ ...f, ingredients: [...f.ingredients, emptyIng()] }));
+  const removeIng = (idx) => setForm(f => ({ ...f, ingredients: f.ingredients.filter((_, i) => i !== idx) }));
+  const updateStep = (idx, val) => setForm(f => { const steps = [...f.steps]; steps[idx] = val; return { ...f, steps }; });
+  const addStep = () => setForm(f => ({ ...f, steps: [...f.steps, ""] }));
+  const removeStep = (idx) => setForm(f => ({ ...f, steps: f.steps.filter((_, i) => i !== idx) }));
+
+  const ingDisplay = (ing) => unitMode === "grams"
+    ? `${ing.grams || "—"} ${ing.gramsUnit}`
+    : `${ing.cups || "—"} ${ing.cupsUnit}`;
+
+  const hostname = (url) => { try { return new URL(url).hostname.replace("www.", ""); } catch { return url; } };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#fdf6ec" }}>
+
+      {/* Header */}
+      <div style={{ background: "#3d2b1f", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 12px rgba(61,43,31,0.18)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 32 }}>📖</span>
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: "#fde8c8", lineHeight: 1 }}>My Recipe Book</div>
+            <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 12, color: "#c9a46e", marginTop: 2 }}>{recipes.length} recipes saved</div>
           </div>
+        </div>
+        <button className="btn btn-primary" onClick={openAdd} style={{ fontSize: 14, padding: "9px 16px" }}>+ Add Recipe</button>
+      </div>
 
-          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px" }}>
 
-            {/* Grid */}
-            {view === "grid" && <>
-              <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
-                <input className="input" style={{ flex: 1, minWidth: 180 }} placeholder="🔍  Search recipes, ingredients, tags..." value={search} onChange={e => setSearch(e.target.value)} />
-                <button className={`btn ${filterFav ? "btn-primary" : "btn-ghost"}`} onClick={() => setFilterFav(f => !f)}>❤️ Favorites</button>
-              </div>
-              <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 24 }}>
-                {["All", ...CATEGORIES].map(c => <button key={c} className={`cat-chip ${filterCat === c ? "active" : ""}`} onClick={() => setFilterCat(c)}>{c}</button>)}
-              </div>
-              {filtered.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "60px 0", color: "#b5914a" }}>
-                  <div style={{ fontSize: 56 }}>🍽️</div>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, margin: "12px 0 6px" }}>No recipes found</div>
-                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15 }}>Try a different search or add a new recipe!</div>
+        {/* GRID VIEW */}
+        {view === "grid" && <>
+          <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+            <input className="input" style={{ flex: 1, minWidth: 180 }} placeholder="🔍  Search recipes, ingredients, tags..." value={search} onChange={e => setSearch(e.target.value)} />
+            <button className={`btn ${filterFav ? "btn-primary" : "btn-ghost"}`} onClick={() => setFilterFav(f => !f)}>❤️ Favorites</button>
+          </div>
+          <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 24 }}>
+            {["All", ...CATEGORIES].map(c => <button key={c} className={`cat-chip ${filterCat === c ? "active" : ""}`} onClick={() => setFilterCat(c)}>{c}</button>)}
+          </div>
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "60px 0", color: "#b5914a" }}>
+              <div style={{ fontSize: 56 }}>🍽️</div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, margin: "12px 0 6px" }}>No recipes found</div>
+              <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15 }}>Try a different search or add a new recipe!</div>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 20 }}>
+              {filtered.map(r => (
+                <div key={r.id} className="card" onClick={() => openDetail(r)} style={{ padding: "20px 18px 16px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 40 }}>{r.emoji || "🍽️"}</span>
+                    <button className="fav-btn" onClick={e => { e.stopPropagation(); toggleFav(r.id); }}>{r.favorite ? "❤️" : "🤍"}</button>
+                  </div>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, margin: "10px 0 6px", lineHeight: 1.2 }}>{r.title}</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                    <span className="tag" style={{ background: "#f9d4a0" }}>📂 {r.category}</span>
+                    {r.time && <span className="tag">⏱ {r.time}</span>}
+                  </div>
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#8b6f47", marginBottom: 8 }}>
+                    {(r.ingredients||[]).slice(0,3).map(i => i.name).filter(Boolean).join(", ")}
+                    {(r.ingredients||[]).length > 3 ? ` +${r.ingredients.length - 3} more` : ""}
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 2, marginBottom: r.sourceUrl ? 8 : 0 }}>
+                    {r.tags && r.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag">{t.trim()}</span>)}
+                  </div>
+                  {r.sourceUrl && (
+                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#b5914a", marginTop: 4 }}>
+                      🔗 {hostname(r.sourceUrl)}
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 20 }}>
-                  {filtered.map(r => (
-                    <div key={r.id} className="card" onClick={() => openDetail(r)} style={{ padding: "20px 18px 16px" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: 40 }}>{r.emoji || "🍽️"}</span>
-                        <button className="fav-btn" onClick={e => { e.stopPropagation(); toggleFav(r.id); }}>{r.favorite ? "❤️" : "🤍"}</button>
-                      </div>
-                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, margin: "10px 0 6px", lineHeight: 1.2 }}>{r.title}</div>
-                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-                        <span className="tag" style={{ background: "#f9d4a0" }}>📂 {r.category}</span>
-                        {r.time && <span className="tag">⏱ {r.time}</span>}
-                      </div>
-                      <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#8b6f47", lineHeight: 1.5, marginBottom: 8, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{r.ingredients}</div>
-                      {r.tags && <div>{r.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag">{t.trim()}</span>)}</div>}
+              ))}
+            </div>
+          )}
+        </>}
+
+        {/* DETAIL VIEW */}
+        {view === "detail" && selected && (
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <button className="btn btn-ghost" onClick={() => setView("grid")} style={{ marginBottom: 20 }}>← Back</button>
+            <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "32px 28px 28px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <span style={{ fontSize: 60 }}>{selected.emoji || "🍽️"}</span>
+                <button className="fav-btn" style={{ fontSize: 28 }} onClick={() => toggleFav(selected.id)}>{selected.favorite ? "❤️" : "🤍"}</button>
+              </div>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, margin: "12px 0 8px" }}>{selected.title}</h1>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: selected.sourceUrl ? 12 : 20 }}>
+                <span className="tag" style={{ background: "#f9d4a0", fontSize: 13 }}>📂 {selected.category}</span>
+                {selected.time && <span className="tag" style={{ fontSize: 13 }}>⏱ {selected.time}</span>}
+                {selected.tags && selected.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag" style={{ fontSize: 13 }}>{t.trim()}</span>)}
+              </div>
+
+              {/* Source link */}
+              {selected.sourceUrl && (
+                <div style={{ marginBottom: 20 }}>
+                  <a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer" className="source-link">
+                    🔗 View original recipe on {hostname(selected.sourceUrl)}
+                  </a>
+                </div>
+              )}
+
+              {/* Ingredients */}
+              <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 22 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, color: "#8b4513" }}>🧺 Ingredients</div>
+                  <div className="unit-toggle">
+                    <button className={unitMode === "cups" ? "active" : ""} onClick={() => setUnitMode("cups")}>Cups</button>
+                    <button className={unitMode === "grams" ? "active" : ""} onClick={() => setUnitMode("grams")}>Grams</button>
+                  </div>
+                </div>
+                <div style={{ background: "#fffdf8", borderRadius: 12, border: "1px solid #f0dfc0", padding: "4px 16px" }}>
+                  {(selected.ingredients || []).map((ing, i) => (
+                    <div key={i} className="ing-list-item">
+                      <div className="ing-bullet"></div>
+                      <div style={{ flex: 1 }}>{ing.name}</div>
+                      <div style={{ color: "#8b4513", fontWeight: 700, whiteSpace: "nowrap" }}>{ingDisplay(ing)}</div>
                     </div>
                   ))}
                 </div>
-              )}
-            </>}
-
-            {/* Detail */}
-            {view === "detail" && selected && (
-              <div style={{ maxWidth: 700, margin: "0 auto" }}>
-                <button className="btn btn-ghost" onClick={() => setView("grid")} style={{ marginBottom: 20 }}>← Back</button>
-                <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "32px 28px 28px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: 60 }}>{selected.emoji || "🍽️"}</span>
-                    <button className="fav-btn" style={{ fontSize: 28 }} onClick={() => toggleFav(selected.id)}>{selected.favorite ? "❤️" : "🤍"}</button>
-                  </div>
-                  <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, margin: "12px 0 8px" }}>{selected.title}</h1>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
-                    <span className="tag" style={{ background: "#f9d4a0", fontSize: 13 }}>📂 {selected.category}</span>
-                    {selected.time && <span className="tag" style={{ fontSize: 13 }}>⏱ {selected.time}</span>}
-                    {selected.tags && selected.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag" style={{ fontSize: 13 }}>{t.trim()}</span>)}
-                  </div>
-                  <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 18 }}>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, marginBottom: 10, color: "#8b4513" }}>🧺 Ingredients</div>
-                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a3020", lineHeight: 1.8, whiteSpace: "pre-wrap" }}>{selected.ingredients}</div>
-                  </div>
-                  <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 26 }}>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, marginBottom: 10, color: "#8b4513" }}>📝 Instructions</div>
-                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a3020", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{selected.instructions}</div>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button className="btn btn-primary" onClick={openEdit}>✏️ Edit</button>
-                    <button className="btn btn-danger" onClick={() => deleteRecipe(selected.id)}>🗑 Delete</button>
-                  </div>
-                </div>
               </div>
-            )}
 
-            {/* Add / Edit Form */}
-            {(view === "add" || view === "edit") && (
-              <div style={{ maxWidth: 680, margin: "0 auto" }}>
-                <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")} style={{ marginBottom: 20 }}>← Back</button>
-                <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "28px 24px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, margin: "0 0 22px" }}>{view === "edit" ? "✏️ Edit Recipe" : "✨ New Recipe"}</h2>
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>RECIPE NAME *</label>
-                    <input className="input" placeholder="e.g. Mom's Chicken Soup" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+              {/* Instructions */}
+              <div style={{ borderTop: "1.5px solid #e8d5b7", paddingTop: 18, marginBottom: 26 }}>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, marginBottom: 14, color: "#8b4513" }}>📝 Instructions</div>
+                {(selected.steps || []).map((step, i) => (
+                  <div key={i} className="step-display">
+                    <div className="step-num-display">{i + 1}</div>
+                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a3020", lineHeight: 1.7, paddingTop: 4 }}>{step}</div>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
-                    <div>
-                      <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>CATEGORY</label>
-                      <select className="input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
-                        {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>COOK TIME</label>
-                      <input className="input" placeholder="e.g. 45m" value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} />
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 8 }}>PICK AN EMOJI</label>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                      {EMOJI_LIST.map(e => <button key={e} className={`emoji-btn ${form.emoji === e ? "sel" : ""}`} onClick={() => setForm(f => ({ ...f, emoji: e }))}>{e}</button>)}
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>TAGS (comma-separated)</label>
-                    <input className="input" placeholder="e.g. easy, vegetarian, comfort food" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} />
-                  </div>
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>INGREDIENTS</label>
-                    <textarea className="input" placeholder="List your ingredients..." value={form.ingredients} onChange={e => setForm(f => ({ ...f, ingredients: e.target.value }))} />
-                  </div>
-                  <div style={{ marginBottom: 20 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 12, color: "#8b4513", display: "block", marginBottom: 6 }}>INSTRUCTIONS</label>
-                    <textarea className="input" style={{ minHeight: 120 }} placeholder="Step by step instructions..." value={form.instructions} onChange={e => setForm(f => ({ ...f, instructions: e.target.value }))} />
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
-                    <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 14, color: "#3d2b1f", display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
-                      <input type="checkbox" checked={form.favorite} onChange={e => setForm(f => ({ ...f, favorite: e.target.checked }))} style={{ width: 17, height: 17, accentColor: "#b5621e" }} />
-                      ❤️ Mark as favorite
-                    </label>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button className="btn btn-primary" onClick={saveRecipe} style={{ fontSize: 15, padding: "11px 26px" }}>{view === "edit" ? "Save Changes" : "Add Recipe"}</button>
-                    <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")}>Cancel</button>
-                  </div>
-                </div>
+                ))}
               </div>
-            )}
+
+              <div style={{ display: "flex", gap: 10 }}>
+                <button className="btn btn-primary" onClick={openEdit}>✏️ Edit</button>
+                <button className="btn btn-danger" onClick={() => deleteRecipe(selected.id)}>🗑 Delete</button>
+              </div>
+            </div>
           </div>
-          {toast && <div className="toast">{toast}</div>}
-        </div>
-      );
-    }
+        )}
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+        {/* ADD / EDIT FORM */}
+        {(view === "add" || view === "edit") && (
+          <div style={{ maxWidth: 740, margin: "0 auto" }}>
+            <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")} style={{ marginBottom: 20 }}>← Back</button>
+            <div style={{ background: "#fff9f2", border: "1.5px solid #e8d5b7", borderRadius: 20, padding: "28px 24px", boxShadow: "0 4px 24px rgba(120,80,40,0.08)" }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, margin: "0 0 22px" }}>{view === "edit" ? "✏️ Edit Recipe" : "✨ New Recipe"}</h2>
+
+              {/* AI Import */}
+              {view === "add" && (
+                <div className="import-box">
+                  <h3>🔗 Import from a website</h3>
+                  <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#7b3f00", marginBottom: 12 }}>
+                    Paste any recipe URL and AI will fill in the form automatically.
+                  </p>
+                  <div className="import-row">
+                    <input
+                      className="input"
+                      placeholder="https://www.anyrecipesite.com/my-recipe"
+                      value={importUrl}
+                      onChange={e => { setImportUrl(e.target.value); setImportError(""); }}
+                      onKeyDown={e => e.key === "Enter" && !importing && handleImport()}
+                      disabled={importing}
+                    />
+                    <button
+                      className="btn btn-primary"
+                      onClick={handleImport}
+                      disabled={importing || !importUrl.trim()}
+                      style={{ whiteSpace: "nowrap", minWidth: 110 }}
+                    >
+                      {importing ? <><span className="importing-spinner"></span>Importing…</> : "✨ Import"}
+                    </button>
+                  </div>
+                  {importError && <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#c0392b", marginTop: 8 }}>⚠️ {importError}</div>}
+                  <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 12, color: "#b5914a", marginTop: 8 }}>Or fill in the form below manually.</div>
+                </div>
+              )}
+
+              {/* Source URL (visible in both add and edit) */}
+              <div style={{ marginBottom: 14 }}>
+                <label className="form-label">SOURCE URL (optional)</label>
+                <input className="input" placeholder="https://..." value={form.sourceUrl || ""} onChange={e => setForm(f => ({ ...f, sourceUrl: e.target.value }))} />
+              </div>
+
+              <div style={{ marginBottom: 14 }}>
+                <label className="form-label">RECIPE NAME *</label>
+                <input className="input" placeholder="e.g. Sourdough Discard Pancakes" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label className="form-label">CATEGORY</label>
+                  <select className="input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+                    {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">COOK TIME</label>
+                  <input className="input" placeholder="e.g. 45m or 1h 30m" value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 14 }}>
+                <label className="form-label">PICK AN EMOJI</label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                  {EMOJI_LIST.map(e => <button key={e} className={`emoji-btn ${form.emoji === e ? "sel" : ""}`} onClick={() => setForm(f => ({ ...f, emoji: e }))}>{e}</button>)}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 14 }}>
+                <label className="form-label">TAGS (comma-separated)</label>
+                <input className="input" placeholder="e.g. easy, vegetarian, comfort food" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} />
+              </div>
+
+              {/* Ingredients table */}
+              <div style={{ marginBottom: 20 }}>
+                <label className="form-label" style={{ marginBottom: 10 }}>🧺 INGREDIENTS</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 72px 78px 72px 72px 28px", gap: 5, marginBottom: 5 }}>
+                  {["INGREDIENT","CUPS/AMT","UNIT","GRAMS","UNIT",""].map((l,i) => <div key={i} style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, color: "#b5914a", fontWeight: 700 }}>{l}</div>)}
+                </div>
+                {form.ingredients.map((ing, i) => (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 72px 78px 72px 72px 28px", gap: 5, marginBottom: 5 }}>
+                    <input className="input" style={{ padding: "8px 10px", fontSize: 14 }} placeholder="Flour" value={ing.name} onChange={e => updateIng(i, "name", e.target.value)} />
+                    <input className="input" style={{ padding: "8px 8px", fontSize: 14 }} placeholder="2" value={ing.cups} onChange={e => updateIng(i, "cups", e.target.value)} />
+                    <select className="input" style={{ padding: "8px 4px", fontSize: 13 }} value={ing.cupsUnit} onChange={e => updateIng(i, "cupsUnit", e.target.value)}>
+                      {CUP_UNITS.map(u => <option key={u}>{u}</option>)}
+                    </select>
+                    <input className="input" style={{ padding: "8px 8px", fontSize: 14 }} placeholder="240" value={ing.grams} onChange={e => updateIng(i, "grams", e.target.value)} />
+                    <select className="input" style={{ padding: "8px 4px", fontSize: 13 }} value={ing.gramsUnit} onChange={e => updateIng(i, "gramsUnit", e.target.value)}>
+                      {GRAM_UNITS.map(u => <option key={u}>{u}</option>)}
+                    </select>
+                    <button className="remove-btn" onClick={() => removeIng(i)}>×</button>
+                  </div>
+                ))}
+                <button className="add-row-btn" onClick={addIng}>+ Add Ingredient</button>
+              </div>
+
+              {/* Steps */}
+              <div style={{ marginBottom: 22 }}>
+                <label className="form-label" style={{ marginBottom: 10 }}>📝 INSTRUCTIONS (one step per box)</label>
+                {form.steps.map((step, i) => (
+                  <div key={i} className="step-row">
+                    <div className="step-num-edit">{i + 1}</div>
+                    <textarea className="input" style={{ fontSize: 14, minHeight: 60 }} placeholder={`Step ${i + 1}…`} value={step} onChange={e => updateStep(i, e.target.value)} />
+                    <button className="remove-btn" onClick={() => removeStep(i)} style={{ marginTop: 10 }}>×</button>
+                  </div>
+                ))}
+                <button className="add-row-btn" onClick={addStep}>+ Add Step</button>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
+                <label style={{ fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 14, color: "#3d2b1f", display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                  <input type="checkbox" checked={form.favorite} onChange={e => setForm(f => ({ ...f, favorite: e.target.checked }))} style={{ width: 17, height: 17, accentColor: "#b5621e" }} />
+                  ❤️ Mark as favorite
+                </label>
+              </div>
+
+              <div style={{ display: "flex", gap: 10 }}>
+                <button className="btn btn-primary" onClick={saveRecipe} style={{ fontSize: 15, padding: "11px 26px" }}>{view === "edit" ? "Save Changes" : "Add Recipe"}</button>
+                <button className="btn btn-ghost" onClick={() => setView(view === "edit" ? "detail" : "grid")}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+```
+
   </script>
 </body>
 </html>
