@@ -6,524 +6,687 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recipes</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <style>
     :root {
-      --bg: #f7f5f2;
-      --surface: #ffffff;
-      --border: #e8e4df;
-      --border-strong: #d4cec7;
-      --text: #1a1714;
-      --text-secondary: #6b6560;
-      --text-tertiary: #a09b95;
-      --accent: #2d6a4f;
-      --accent-light: #e8f4ee;
-      --accent-hover: #1f4f3a;
-      --danger: #c0392b;
-      --danger-light: #fdf0ef;
-      --tag-bg: #f0ede9;
-      --tag-text: #4a4540;
-      --radius: 12px;
-      --radius-lg: 18px;
+      --bg: #f7f5f2; --surface: #fff; --border: #e8e4df; --border-strong: #d4cec7;
+      --text: #1a1714; --text2: #6b6560; --text3: #a09b95;
+      --accent: #2d6a4f; --accent-light: #e8f4ee; --accent-hover: #1f4f3a;
+      --danger: #c0392b; --danger-light: #fdf0ef;
+      --tag-bg: #f0ede9; --tag-text: #4a4540;
       --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
       --shadow-hover: 0 4px 6px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
-
-```
-/* Buttons */
-.btn { border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; border-radius: 8px; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-.btn-primary { background: var(--accent); color: #fff; padding: 10px 20px; font-size: 14px; }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-ghost { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border-strong); padding: 8px 16px; font-size: 14px; }
-.btn-ghost:hover { background: var(--tag-bg); color: var(--text); }
-.btn-danger { background: transparent; color: var(--danger); border: 1.5px solid #e8c5c2; padding: 8px 16px; font-size: 14px; }
-.btn-danger:hover { background: var(--danger-light); }
-
-/* Inputs */
-.input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--surface); color: var(--text); outline: none; transition: border 0.15s; }
-.input:focus { border-color: var(--accent); }
-textarea.input { resize: vertical; min-height: 70px; }
-select.input { appearance: none; cursor: pointer; }
-
-/* Cards */
-.card { background: var(--surface); border-radius: var(--radius-lg); border: 1.5px solid var(--border); transition: all 0.2s; cursor: pointer; overflow: hidden; }
-.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--border-strong); }
-
-/* Tags & chips */
-.tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 500; margin: 2px; }
-.tag-accent { background: var(--accent-light); color: var(--accent); }
-.cat-chip { background: var(--surface); color: var(--text-secondary); border: 1.5px solid var(--border); border-radius: 20px; padding: 6px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.cat-chip:hover { border-color: var(--accent); color: var(--accent); }
-.cat-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* Fav button */
-.fav-btn { background: none; border: none; cursor: pointer; font-size: 20px; transition: transform 0.15s; padding: 4px; border-radius: 6px; }
-.fav-btn:hover { transform: scale(1.2); }
-
-/* Unit toggle */
-.unit-toggle { display: flex; background: var(--tag-bg); border-radius: 20px; padding: 3px; gap: 2px; }
-.unit-toggle button { border: none; border-radius: 16px; padding: 5px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-secondary); transition: all 0.15s; }
-.unit-toggle button.active { background: var(--surface); color: var(--accent); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-
-/* Ingredient list */
-.ing-list-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-.ing-list-item:last-child { border-bottom: none; }
-.ing-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
-
-/* Steps */
-.step-display { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
-.step-num { background: var(--accent); color: #fff; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-.step-num-edit { background: var(--accent-light); color: var(--accent); border-radius: 8px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 11px; }
-
-/* Form helpers */
-.form-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 7px; }
-.remove-btn { background: none; border: none; cursor: pointer; color: var(--text-tertiary); font-size: 18px; padding: 2px 6px; border-radius: 6px; line-height: 1; transition: color 0.1s; }
-.remove-btn:hover { color: var(--danger); background: var(--danger-light); }
-.add-row-btn { background: transparent; border: 1.5px dashed var(--border-strong); color: var(--text-secondary); border-radius: 8px; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; margin-top: 6px; transition: all 0.15s; }
-.add-row-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-.step-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
-
-/* Import box */
-.import-box { background: var(--accent-light); border: 1.5px solid #b7d9c8; border-radius: var(--radius); padding: 18px; margin-bottom: 24px; }
-.import-row { display: flex; gap: 8px; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Source link */
-.source-link { display: inline-flex; align-items: center; gap: 6px; background: var(--tag-bg); color: var(--text-secondary); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 500; text-decoration: none; border: 1.5px solid var(--border); transition: all 0.15s; }
-.source-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-
-/* Emoji picker */
-.emoji-btn { font-size: 20px; padding: 5px 7px; background: var(--tag-bg); border: 1.5px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.1s; }
-.emoji-btn:hover { background: var(--border); }
-.emoji-btn.sel { border-color: var(--accent); background: var(--accent-light); }
-
-/* Toast */
-.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; padding: 11px 24px; border-radius: 30px; font-size: 14px; font-weight: 500; z-index: 999; animation: fadeup 0.25s ease; white-space: nowrap; }
-@keyframes fadeup { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-
-/* Divider */
-.divider { border: none; border-top: 1.5px solid var(--border); margin: 22px 0; }
-
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
-```
-
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+    .btn{border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;border-radius:8px;transition:all .15s;display:inline-flex;align-items:center;gap:6px;font-size:14px}
+    .btn-primary{background:var(--accent);color:#fff;padding:10px 20px}
+    .btn-primary:hover{background:var(--accent-hover)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+    .btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border-strong);padding:8px 16px}
+    .btn-ghost:hover{background:var(--tag-bg);color:var(--text)}
+    .btn-danger{background:transparent;color:var(--danger);border:1.5px solid #e8c5c2;padding:8px 16px}
+    .btn-danger:hover{background:var(--danger-light)}
+    .btn-sm{padding:6px 14px;font-size:13px}
+    input,textarea,select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--surface);color:var(--text);outline:none;transition:border .15s;box-sizing:border-box}
+    input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+    textarea{resize:vertical;min-height:70px}
+    select{appearance:none;cursor:pointer}
+    .card{background:var(--surface);border-radius:18px;border:1.5px solid var(--border);transition:all .2s;cursor:pointer;overflow:hidden}
+    .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+    .tag{display:inline-block;background:var(--tag-bg);color:var(--tag-text);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:500;margin:2px}
+    .tag-accent{background:var(--accent-light);color:var(--accent)}
+    .cat-chip{background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:20px;padding:6px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
+    .cat-chip:hover{border-color:var(--accent);color:var(--accent)}
+    .cat-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .unit-toggle{display:flex;background:var(--tag-bg);border-radius:20px;padding:3px;gap:2px}
+    .unit-toggle button{border:none;border-radius:16px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--text2);transition:all .15s}
+    .unit-toggle button.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+    .ing-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+    .ing-row:last-child{border-bottom:none}
+    .ing-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0}
+    .step-row-display{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+    .step-num{background:var(--accent);color:#fff;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px}
+    .form-label{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:7px}
+    .remove-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:2px 6px;border-radius:6px;line-height:1;transition:color .1s;flex-shrink:0}
+    .remove-btn:hover{color:var(--danger);background:var(--danger-light)}
+    .add-row-btn{background:transparent;border:1.5px dashed var(--border-strong);color:var(--text2);border-radius:8px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;width:100%;margin-top:6px;transition:all .15s}
+    .add-row-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+    .import-box{background:var(--accent-light);border:1.5px solid #b7d9c8;border-radius:12px;padding:18px;margin-bottom:24px}
+    .import-row{display:flex;gap:8px}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .source-badge{font-size:13px;color:var(--text2);font-weight:500}
+    .source-badge a{color:var(--accent);text-decoration:none;font-weight:600}
+    .source-badge a:hover{text-decoration:underline}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:11px 24px;border-radius:30px;font-size:14px;font-weight:500;z-index:999;animation:fadeup .25s ease;white-space:nowrap;pointer-events:none}
+    @keyframes fadeup{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    .divider{border:none;border-top:1.5px solid var(--border);margin:22px 0}
+    .schedule-box{background:#f0f7f4;border:1.5px solid #b7d9c8;border-radius:14px;padding:22px;margin-top:4px}
+    .schedule-step-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #cde8da}
+    .schedule-step-row:last-child{border-bottom:none}
+    .sched-dot{width:10px;height:10px;background:var(--accent);border-radius:50%;flex-shrink:0;margin-top:4px}
+    .sched-time{font-size:13px;font-weight:700;color:var(--accent);min-width:95px;padding-top:2px}
+    .sched-name{font-size:14px;flex:1;line-height:1.4}
+    .dur-input{width:65px;padding:4px 8px;border:1.5px solid #b7d9c8;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);color:var(--text);outline:none;text-align:center}
+    .dur-input:focus{border-color:var(--accent)}
+    .emoji-btn{font-size:20px;padding:5px 7px;background:var(--tag-bg);border:1.5px solid transparent;border-radius:8px;cursor:pointer;transition:all .1s;width:auto}
+    .emoji-btn:hover{background:var(--border)}
+    .emoji-btn.sel{border-color:var(--accent);background:var(--accent-light)}
+    .fav-btn{background:none;border:none;cursor:pointer;font-size:20px;transition:transform .15s;padding:4px;border-radius:6px}
+    .fav-btn:hover{transform:scale(1.2)}
+    header{background:var(--surface);border-bottom:1.5px solid var(--border);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    #app{max-width:1080px;margin:0 auto;padding:28px 20px}
+    .panel{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:32px 28px;box-shadow:var(--shadow)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+    .ing-form-grid{display:grid;grid-template-columns:1fr 68px 76px 68px 68px 28px;gap:5px;margin-bottom:5px;align-items:center}
+    .ing-form-grid input,.ing-form-grid select{padding:8px 8px;font-size:13px}
+    @media(max-width:600px){
+      .ing-form-grid{grid-template-columns:1fr 58px 68px 58px 58px 24px}
+      .panel{padding:20px 16px}
+      header{padding:0 16px}
+    }
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+    .serif{font-family:'DM Serif Display',serif}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useEffect } = React;
 
-```
+<header>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:24px">🍽️</span>
+    <span class="serif" style="font-size:22px;letter-spacing:-.02em">Recipes</span>
+  </div>
+  <button class="btn btn-primary" id="btn-new">+ New Recipe</button>
+</header>
+
+<div id="app">
+  <!-- views injected here -->
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script>
+// ─── Constants ───────────────────────────────────────────────────────────────
 const CATEGORIES = ["Breakfast","Lunch","Dinner","Dessert","Snacks","Drinks","Soups","Salads","Baking","Sourdough","Other"];
 const EMOJI_LIST = ["🍞","🥖","🫓","🍎","🍋","🥧","🍝","🥗","🍲","🥞","🍕","🍜","🥘","🫕","🍱","🥩","🍗","🥦","🥕","🍳","🧁","🎂","🍰","☕","🫖","🍵","🥤","🍹","🥐","🥨","🧀","🥚","🥓","🌮","🌯","🧆"];
 const CUP_UNITS = ["cup","tbsp","tsp","oz","lb","pinch","to taste","whole","slice","clove","handful"];
 const GRAM_UNITS = ["g","kg","ml","L","pinch","to taste","whole","slice","clove","handful"];
-const STORAGE_KEY = "myrecipebook_v3";
+const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const STORAGE_KEY = "myrecipebook_v4";
 
 const SAMPLE_RECIPES = [
-  {
-    id: 1, title: "Grandma's Apple Pie", category: "Dessert", tags: "sweet, classic, fall", sourceUrl: "",
-    ingredients: [
-      { name: "Apples", cups: "6", cupsUnit: "whole", grams: "900", gramsUnit: "g" },
-      { name: "Flour", cups: "2", cupsUnit: "cup", grams: "240", gramsUnit: "g" },
-      { name: "Sugar", cups: "1", cupsUnit: "cup", grams: "200", gramsUnit: "g" },
-      { name: "Butter", cups: "½", cupsUnit: "cup", grams: "113", gramsUnit: "g" },
-      { name: "Cinnamon", cups: "1", cupsUnit: "tsp", grams: "2.5", gramsUnit: "g" },
-    ],
-    steps: [
-      "Peel and slice apples. Toss with sugar and cinnamon.",
-      "Make crust: combine flour and cold butter until crumbly. Add ice water until dough forms.",
-      "Roll out half the dough and line a 9-inch pie dish.",
-      "Fill with apple mixture. Top with remaining dough and crimp edges.",
-      "Bake at 375°F for 45 minutes until golden brown."
-    ],
-    favorite: true, emoji: "🍎", time: "1h 15m"
+  { id:1, title:"Grandma's Apple Pie", category:"Dessert", tags:"sweet, classic, fall", sourceUrl:"", favorite:true, emoji:"🍎", time:"1h 15m",
+    ingredients:[{name:"Apples",cups:"6",cupsUnit:"whole",grams:"900",gramsUnit:"g"},{name:"Flour",cups:"2",cupsUnit:"cup",grams:"240",gramsUnit:"g"},{name:"Sugar",cups:"1",cupsUnit:"cup",grams:"200",gramsUnit:"g"},{name:"Butter",cups:"½",cupsUnit:"cup",grams:"113",gramsUnit:"g"},{name:"Cinnamon",cups:"1",cupsUnit:"tsp",grams:"2.5",gramsUnit:"g"}],
+    steps:["Peel and slice apples. Toss with sugar and cinnamon.","Make crust: combine flour and cold butter until crumbly. Add ice water until dough forms.","Roll out half the dough and line a 9-inch pie dish.","Fill with apple mixture. Top with remaining dough and crimp edges.","Bake at 375°F for 45 minutes until golden brown."]
   },
-  {
-    id: 2, title: "Classic Sourdough Loaf", category: "Sourdough", tags: "bread, fermented, crusty", sourceUrl: "",
-    ingredients: [
-      { name: "Bread flour", cups: "4", cupsUnit: "cup", grams: "500", gramsUnit: "g" },
-      { name: "Water", cups: "1⅓", cupsUnit: "cup", grams: "375", gramsUnit: "ml" },
-      { name: "Active starter", cups: "½", cupsUnit: "cup", grams: "100", gramsUnit: "g" },
-      { name: "Salt", cups: "1¾", cupsUnit: "tsp", grams: "10", gramsUnit: "g" }
-    ],
-    steps: [
-      "Mix flour and water together. Rest 30 minutes (autolyse).",
-      "Add starter and salt. Mix well until fully incorporated.",
-      "Perform 4 sets of stretch and folds every 30 minutes over 2 hours.",
-      "Bulk ferment at room temperature 4–6 hours until risen 50%.",
-      "Shape into a boule, place in floured banneton seam-side up.",
-      "Cold proof in fridge overnight (8–16 hours).",
-      "Preheat oven with Dutch oven inside at 500°F for 1 hour.",
-      "Score the dough. Bake covered 20 min, then uncovered 20–25 min until deep brown."
-    ],
-    favorite: true, emoji: "🍞", time: "24h"
+  { id:2, title:"Classic Sourdough Loaf", category:"Sourdough", tags:"bread, fermented, crusty", sourceUrl:"", favorite:true, emoji:"🍞", time:"24h",
+    ingredients:[{name:"Bread flour",cups:"4",cupsUnit:"cup",grams:"500",gramsUnit:"g"},{name:"Water",cups:"1⅓",cupsUnit:"cup",grams:"375",gramsUnit:"ml"},{name:"Active starter",cups:"½",cupsUnit:"cup",grams:"100",gramsUnit:"g"},{name:"Salt",cups:"1¾",cupsUnit:"tsp",grams:"10",gramsUnit:"g"}],
+    steps:["Mix flour and water together. Rest 30 minutes (autolyse).","Add starter and salt. Mix well until fully incorporated.","Perform 4 sets of stretch and folds every 30 minutes over 2 hours.","Bulk ferment at room temperature 4–6 hours until risen 50%.","Shape into a boule, place in floured banneton seam-side up.","Cold proof in fridge overnight (8–16 hours).","Preheat oven with Dutch oven inside at 500°F for 1 hour.","Score the dough. Bake covered 20 min, then uncovered 20–25 min until deep brown."]
   }
 ];
 
-const emptyIng = () => ({ name: "", cups: "", cupsUnit: "cup", grams: "", gramsUnit: "g" });
-const emptyForm = () => ({ title: "", category: "Dinner", tags: "", ingredients: [emptyIng()], steps: [""], emoji: "🍽️", time: "", favorite: false, sourceUrl: "" });
+// ─── State ────────────────────────────────────────────────────────────────────
+let state = {
+  recipes: [],
+  view: "grid",       // grid | detail | form
+  selectedId: null,
+  search: "",
+  filterCat: "All",
+  filterFav: false,
+  unitMode: "cups",
+  form: emptyForm(),
+  formMode: "add",    // add | edit
+  importing: false,
+  importError: "",
+  schedEndDay: new Date().getDay(),
+  schedEndHour: 8,
+  schedEndMinute: 0,
+  schedEndAmpm: "AM",
+  schedDurations: [],
+};
 
-async function importRecipeFromUrl(url) {
-  const prompt = `You are a recipe extraction assistant. I will give you a URL. Use web search to fetch and read the content at that URL, then extract the recipe information and return it as a JSON object.
+function emptyForm() {
+  return { title:"", category:"Dinner", tags:"", ingredients:[emptyIng()], steps:[""], emoji:"🍽️", time:"", favorite:false, sourceUrl:"" };
+}
+function emptyIng() { return {name:"",cups:"",cupsUnit:"cup",grams:"",gramsUnit:"g"}; }
+
+// ─── Persistence ──────────────────────────────────────────────────────────────
+function loadRecipes() {
+  try { const s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : SAMPLE_RECIPES; }
+  catch { return SAMPLE_RECIPES; }
+}
+function saveRecipes() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.recipes)); } catch {}
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 2500);
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function hostname(url) { try { return new URL(url).hostname.replace("www.",""); } catch { return url; } }
+function esc(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function ingDisplay(ing) {
+  if (state.unitMode === "grams") return `${esc(ing.grams||"—")} ${esc(ing.gramsUnit)}`;
+  return `${esc(ing.cups||"—")} ${esc(ing.cupsUnit)}`;
+}
+function guessDuration(step) {
+  const t = step.toLowerCase();
+  if (t.includes("overnight")||t.includes("cold proof")||t.includes("8–16")||t.includes("8-16")) return 600;
+  if (t.includes("bulk ferment")||t.includes("4–6")||t.includes("4-6 hour")) return 300;
+  if (t.includes("preheat")&&t.includes("1 hour")) return 60;
+  if (t.includes("autolyse")||t.includes("30 min")) return 30;
+  if (t.includes("stretch and fold")||t.includes("2 hour")) return 120;
+  if (t.includes("shape")) return 15;
+  if (t.includes("score")||t.includes("bake covered")) return 45;
+  if (t.includes("mix")) return 10;
+  return 20;
+}
+function fmtSchedTime(date) {
+  const D=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const h=date.getHours(), m=date.getMinutes();
+  const ap=h>=12?"PM":"AM", h12=h%12||12, mm=m.toString().padStart(2,"0");
+  return `${D[date.getDay()]} ${h12}:${mm} ${ap}`;
+}
+function buildSchedule() {
+  const target = new Date();
+  target.setSeconds(0,0);
+  let h = state.schedEndHour % 12;
+  if (state.schedEndAmpm === "PM") h += 12;
+  target.setHours(h, state.schedEndMinute);
+  const today = target.getDay();
+  let daysUntil = (state.schedEndDay - today + 7) % 7;
+  if (daysUntil === 0 && target <= new Date()) daysUntil = 7;
+  target.setDate(target.getDate() + daysUntil);
+  const totalMins = state.schedDurations.reduce((a,b)=>a+b,0);
+  let cursor = target.getTime() - totalMins*60000;
+  const recipe = state.recipes.find(r=>r.id===state.selectedId);
+  return (recipe.steps||[]).map((step,i)=>{
+    const start = new Date(cursor);
+    cursor += state.schedDurations[i]*60000;
+    return {step, start, dur: state.schedDurations[i]};
+  });
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  if (state.view === "grid") app.innerHTML = renderGrid();
+  else if (state.view === "detail") app.innerHTML = renderDetail();
+  else if (state.view === "form") app.innerHTML = renderForm();
+  bindEvents();
+}
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+function renderGrid() {
+  const filtered = state.recipes.filter(r => {
+    const q = state.search.toLowerCase();
+    const ingText = (r.ingredients||[]).map(i=>i.name).join(" ").toLowerCase();
+    return (!q || r.title.toLowerCase().includes(q) || (r.tags||"").toLowerCase().includes(q) || ingText.includes(q))
+      && (state.filterCat==="All" || r.category===state.filterCat)
+      && (!state.filterFav || r.favorite);
+  });
+
+  const chips = ["All",...CATEGORIES].map(c =>
+    `<button class="cat-chip${state.filterCat===c?" active":""}" data-cat="${esc(c)}">${esc(c)}</button>`
+  ).join("");
+
+  const cards = filtered.length === 0
+    ? `<div style="text-align:center;padding:80px 0;color:var(--text3)">
+        <div style="font-size:48px;margin-bottom:16px">🍽️</div>
+        <div class="serif" style="font-size:22px;color:var(--text2);margin-bottom:8px">No recipes found</div>
+        <div style="font-size:14px">Try a different search or add a new recipe</div>
+       </div>`
+    : `<div class="grid">${filtered.map(r => `
+      <div class="card" data-recipe="${r.id}" style="padding:22px 20px 18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="width:48px;height:48px;background:var(--bg);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px">${esc(r.emoji||"🍽️")}</div>
+          <button class="fav-btn" data-fav="${r.id}">${r.favorite?"❤️":"🤍"}</button>
+        </div>
+        <div class="serif" style="font-size:18px;line-height:1.25;margin-bottom:8px">${esc(r.title)}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+          <span class="tag tag-accent">${esc(r.category)}</span>
+          ${r.time?`<span class="tag">⏱ ${esc(r.time)}</span>`:""}
+        </div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;line-height:1.5">
+          ${(r.ingredients||[]).slice(0,3).map(i=>esc(i.name)).filter(Boolean).join(" · ")}${(r.ingredients||[]).length>3?` +${r.ingredients.length-3}`:""}
+        </div>
+        ${r.tags?`<div style="display:flex;flex-wrap:wrap;gap:3px">${r.tags.split(",").filter(Boolean).slice(0,3).map(t=>`<span class="tag" style="font-size:11px">${esc(t.trim())}</span>`).join("")}</div>`:""}
+        ${r.sourceUrl?`<div style="font-size:11px;color:var(--text3);margin-top:10px">🔗 ${esc(hostname(r.sourceUrl))}</div>`:""}
+      </div>`).join("")}</div>`;
+
+  return `
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px;position:relative">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px">⌕</span>
+        <input id="search-input" style="padding-left:34px" placeholder="Search recipes, ingredients, tags…" value="${esc(state.search)}" />
+      </div>
+      <button class="btn ${state.filterFav?"btn-primary":"btn-ghost"}" id="btn-fav">${state.filterFav?"❤️":"♡"} Favorites</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px">${chips}</div>
+    ${cards}`;
+}
+
+// ── Detail ────────────────────────────────────────────────────────────────────
+function renderDetail() {
+  const r = state.recipes.find(r=>r.id===state.selectedId);
+  if (!r) return "";
+
+  const ings = (r.ingredients||[]).map(ing=>`
+    <div class="ing-row">
+      <div class="ing-dot"></div>
+      <div style="flex:1">${esc(ing.name)}</div>
+      <div style="color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap">${ingDisplay(ing)}</div>
+    </div>`).join("");
+
+  const steps = (r.steps||[]).map((s,i)=>`
+    <div class="step-row-display">
+      <div class="step-num">${i+1}</div>
+      <div style="font-size:15px;line-height:1.7;padding-top:3px">${esc(s)}</div>
+    </div>`).join("");
+
+  const schedHtml = r.category==="Sourdough" && r.steps?.length ? renderSchedule(r) : "";
+
+  return `
+    <div style="max-width:680px;margin:0 auto">
+      <button class="btn btn-ghost" id="btn-back" style="margin-bottom:20px">← Back</button>
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+          <div style="width:64px;height:64px;background:var(--bg);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px">${esc(r.emoji||"🍽️")}</div>
+          <button class="fav-btn" data-fav="${r.id}" style="font-size:24px">${r.favorite?"❤️":"🤍"}</button>
+        </div>
+        <h1 class="serif" style="font-size:30px;line-height:1.2;margin-bottom:12px">${esc(r.title)}</h1>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:${r.sourceUrl?"12px":"20px"}">
+          <span class="tag tag-accent" style="font-size:13px">${esc(r.category)}</span>
+          ${r.time?`<span class="tag" style="font-size:13px">⏱ ${esc(r.time)}</span>`:""}
+          ${r.tags?r.tags.split(",").filter(Boolean).map(t=>`<span class="tag" style="font-size:13px">${esc(t.trim())}</span>`).join(""):""}
+        </div>
+        ${r.sourceUrl?`<div style="margin-bottom:18px" class="source-badge">Source: <a href="${esc(r.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(hostname(r.sourceUrl))} ↗</a></div>`:""}
+        <hr class="divider"/>
+        <div style="margin-bottom:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <h2 class="serif" style="font-size:20px">Ingredients</h2>
+            <div class="unit-toggle">
+              <button class="${state.unitMode==="cups"?"active":""}" data-unit="cups">Cups</button>
+              <button class="${state.unitMode==="grams"?"active":""}" data-unit="grams">Grams</button>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:10px;padding:0 16px">${ings}</div>
+        </div>
+        <hr class="divider" style="margin:0 0 24px"/>
+        <div style="margin-bottom:${r.category==="Sourdough"?"24px":"28px"}">
+          <h2 class="serif" style="font-size:20px;margin-bottom:16px">Instructions</h2>
+          ${steps}
+        </div>
+        ${schedHtml}
+        <div style="display:flex;gap:8px;margin-top:28px">
+          <button class="btn btn-primary" id="btn-edit">Edit Recipe</button>
+          <button class="btn btn-danger" id="btn-delete">Delete</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSchedule(r) {
+  if (!state.schedDurations.length || state.schedDurations.length !== r.steps.length) {
+    state.schedDurations = r.steps.map(guessDuration);
+  }
+  const sched = buildSchedule();
+  const totalMins = state.schedDurations.reduce((a,b)=>a+b,0);
+  const hrs = Math.floor(totalMins/60), mins = totalMins%60;
+
+  const hours = Array.from({length:12},(_,i)=>i+1);
+  const minutes = ["00","15","30","45"];
+
+  return `
+    <hr class="divider" style="margin:0 0 24px"/>
+    <div class="schedule-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <h2 class="serif" style="font-size:20px;color:var(--accent)">🕐 Baking Schedule</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:600;color:var(--text2)">Ready by:</span>
+        <select id="sched-day" style="width:auto;padding:6px 10px;font-size:13px">
+          ${DAYS.map((d,i)=>`<option value="${i}"${state.schedEndDay===i?" selected":""}>${d}</option>`).join("")}
+        </select>
+        <select id="sched-hour" style="width:60px;padding:6px 8px;font-size:13px">
+          ${hours.map(h=>`<option value="${h}"${state.schedEndHour===h?" selected":""}>${h}</option>`).join("")}
+        </select>
+        <select id="sched-min" style="width:60px;padding:6px 8px;font-size:13px">
+          ${minutes.map(m=>`<option value="${Number(m)}"${state.schedEndMinute===Number(m)?" selected":""}>${m}</option>`).join("")}
+        </select>
+        <select id="sched-ampm" style="width:65px;padding:6px 8px;font-size:13px">
+          <option${state.schedEndAmpm==="AM"?" selected":""}>AM</option>
+          <option${state.schedEndAmpm==="PM"?" selected":""}>PM</option>
+        </select>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Adjust step durations — times update automatically.</div>
+      ${sched.map((s,i)=>`
+        <div class="schedule-step-row">
+          <div class="sched-dot"></div>
+          <div style="flex:1">
+            <div class="sched-time">${fmtSchedTime(s.start)}</div>
+            <div class="sched-name">${esc(s.step)}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+            <input type="number" class="dur-input" data-dur="${i}" value="${s.dur}" min="1"/>
+            <span style="font-size:11px;color:var(--text3)">min</span>
+          </div>
+        </div>`).join("")}
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid #cde8da;display:flex;justify-content:space-between">
+        <span style="font-size:13px;color:var(--text2)">Total time</span>
+        <span style="font-size:14px;font-weight:700;color:var(--accent)">${hrs}h ${mins}m</span>
+      </div>
+    </div>`;
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+function renderForm() {
+  const f = state.form;
+  const isEdit = state.formMode === "edit";
+
+  const catOptions = CATEGORIES.map(c=>`<option${f.category===c?" selected":""}>${esc(c)}</option>`).join("");
+
+  const ingRows = f.ingredients.map((ing,i)=>`
+    <div class="ing-form-grid">
+      <input data-ing="${i}" data-field="name" placeholder="Flour" value="${esc(ing.name)}"/>
+      <input data-ing="${i}" data-field="cups" placeholder="2" value="${esc(ing.cups)}"/>
+      <select data-ing="${i}" data-field="cupsUnit">${CUP_UNITS.map(u=>`<option${ing.cupsUnit===u?" selected":""}>${u}</option>`).join("")}</select>
+      <input data-ing="${i}" data-field="grams" placeholder="240" value="${esc(ing.grams)}"/>
+      <select data-ing="${i}" data-field="gramsUnit">${GRAM_UNITS.map(u=>`<option${ing.gramsUnit===u?" selected":""}>${u}</option>`).join("")}</select>
+      <button class="remove-btn" data-remove-ing="${i}">×</button>
+    </div>`).join("");
+
+  const stepRows = f.steps.map((s,i)=>`
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
+      <div style="background:var(--accent-light);color:var(--accent);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:11px">${i+1}</div>
+      <textarea data-step="${i}" placeholder="Step ${i+1}…" style="min-height:60px;font-size:14px">${esc(s)}</textarea>
+
 ```
+  <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button>
+</div>`).join("");
+```
+
+const emojiBtns = EMOJI_LIST.map(e=>`<button class="emoji-btn${f.emoji===e?" sel":""}" data-emoji="${e}">${e}</button>`).join(””);
+
+return `
+<div style="max-width:720px;margin:0 auto">
+<button class="btn btn-ghost" id="btn-back" style="margin-bottom:20px">← Back</button>
+<div class="panel" style="padding:28px 24px">
+<h2 class="serif" style="font-size:26px;margin-bottom:24px">${isEdit?“Edit Recipe”:“New Recipe”}</h2>
+
+```
+    ${!isEdit?`
+    <div class="import-box">
+      <div style="font-weight:600;font-size:14px;color:var(--accent);margin-bottom:6px">✦ Import from URL</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Paste any recipe link and AI will fill in the form automatically.</div>
+      <div class="import-row">
+        <input id="import-url" placeholder="https://..." value="${esc(state.importUrl||"")}" ${state.importing?"disabled":""}/>
+        <button class="btn btn-primary" id="btn-import" ${state.importing||!state.importUrl?"disabled":""} style="white-space:nowrap;min-width:100px">
+          ${state.importing?'<span class="spinner"></span> Importing':"Import"}
+        </button>
+      </div>
+      ${state.importError?`<div style="font-size:12px;color:var(--danger);margin-top:8px">⚠ ${esc(state.importError)}</div>`:""}
+    </div>`:""}
+
+    <div style="margin-bottom:16px">
+      <label class="form-label">Source URL (optional)</label>
+      <input id="f-sourceUrl" placeholder="https://..." value="${esc(f.sourceUrl||"")}"/>
+    </div>
+    <div style="margin-bottom:16px">
+      <label class="form-label">Recipe Name *</label>
+      <input id="f-title" placeholder="e.g. Sourdough Discard Pancakes" value="${esc(f.title)}"/>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="form-label">Category</label>
+        <select id="f-category">${catOptions}</select>
+      </div>
+      <div>
+        <label class="form-label">Cook Time</label>
+        <input id="f-time" placeholder="e.g. 45m or 1h 30m" value="${esc(f.time)}"/>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <label class="form-label">Emoji</label>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${emojiBtns}</div>
+    </div>
+    <div style="margin-bottom:16px">
+      <label class="form-label">Tags</label>
+      <input id="f-tags" placeholder="e.g. easy, vegetarian, quick" value="${esc(f.tags)}"/>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <label class="form-label" style="margin-bottom:10px">Ingredients</label>
+      <div class="ing-form-grid" style="margin-bottom:6px">
+        ${["Ingredient","Cups/Amt","Unit","Grams","Unit",""].map(l=>`<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">${l}</div>`).join("")}
+      </div>
+      <div id="ing-rows">${ingRows}</div>
+      <button class="add-row-btn" id="btn-add-ing">+ Add Ingredient</button>
+    </div>
+
+    <div style="margin-bottom:22px">
+      <label class="form-label" style="margin-bottom:10px">Instructions</label>
+      <div id="step-rows">${stepRows}</div>
+      <button class="add-row-btn" id="btn-add-step">+ Add Step</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
+      <input type="checkbox" id="f-fav" ${f.favorite?"checked":""} style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer"/>
+      <label for="f-fav" style="font-size:14px;font-weight:500;cursor:pointer;user-select:none">Mark as favorite</label>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" id="btn-save" style="font-size:15px;padding:11px 24px">${isEdit?"Save Changes":"Add Recipe"}</button>
+      <button class="btn btn-ghost" id="btn-cancel">Cancel</button>
+    </div>
+  </div>
+</div>`;
+```
+
+}
+
+// ─── Events ───────────────────────────────────────────────────────────────────
+function bindEvents() {
+const on = (id, ev, fn) => { const el=document.getElementById(id); if(el) el.addEventListener(ev, fn); };
+const onAll = (sel, ev, fn) => document.querySelectorAll(sel).forEach(el=>el.addEventListener(ev,fn));
+
+// Header
+document.getElementById(“btn-new”).onclick = () => {
+state.form = emptyForm(); state.formMode = “add”; state.importUrl = “”; state.importError = “”;
+state.view = “form”; render();
+};
+
+if (state.view === “grid”) {
+on(“search-input”,“input”, e=>{ state.search=e.target.value; render(); });
+on(“btn-fav”,“click”, ()=>{ state.filterFav=!state.filterFav; render(); });
+onAll(”.cat-chip”,“click”, e=>{ state.filterCat=e.target.dataset.cat; render(); });
+onAll(”[data-recipe]”,“click”, e=>{
+const card = e.target.closest(”[data-recipe]”);
+if(card && !e.target.closest(”[data-fav]”)) { state.selectedId=Number(card.dataset.recipe); state.schedDurations=[]; state.view=“detail”; render(); }
+});
+onAll(”[data-fav]”,“click”, e=>{ e.stopPropagation(); toggleFav(Number(e.currentTarget.dataset.fav)); });
+}
+
+if (state.view === “detail”) {
+on(“btn-back”,“click”,()=>{ state.view=“grid”; render(); });
+on(“btn-edit”,“click”,()=>{
+const r=state.recipes.find(r=>r.id===state.selectedId);
+state.form={…r,ingredients:r.ingredients?.length?[…r.ingredients.map(i=>({…i}))]: [emptyIng()],steps:r.steps?.length?[…r.steps]:[””]};
+state.formMode=“edit”; state.importError=””; state.view=“form”; render();
+});
+on(“btn-delete”,“click”,()=>{
+if(confirm(“Delete this recipe?”)) { state.recipes=state.recipes.filter(r=>r.id!==state.selectedId); saveRecipes(); state.view=“grid”; render(); showToast(“Recipe deleted”); }
+});
+onAll(”[data-fav]”,“click”, e=>{ toggleFav(Number(e.currentTarget.dataset.fav)); });
+onAll(”[data-unit]”,“click”, e=>{ state.unitMode=e.target.dataset.unit; render(); });
+// Schedule
+on(“sched-day”,“change”,e=>{ state.schedEndDay=Number(e.target.value); renderScheduleOnly(); });
+on(“sched-hour”,“change”,e=>{ state.schedEndHour=Number(e.target.value); renderScheduleOnly(); });
+on(“sched-min”,“change”,e=>{ state.schedEndMinute=Number(e.target.value); renderScheduleOnly(); });
+on(“sched-ampm”,“change”,e=>{ state.schedEndAmpm=e.target.value; renderScheduleOnly(); });
+onAll(”[data-dur]”,“input”, e=>{
+const i=Number(e.target.dataset.dur);
+state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
+renderScheduleOnly();
+});
+}
+
+if (state.view === “form”) {
+on(“btn-back”,“click”,()=>{ state.view=state.formMode===“edit”?“detail”:“grid”; render(); });
+on(“btn-cancel”,“click”,()=>{ state.view=state.formMode===“edit”?“detail”:“grid”; render(); });
+on(“btn-save”,“click”, saveRecipe);
+on(“btn-add-ing”,“click”,()=>{ state.form.ingredients.push(emptyIng()); renderFormPartial(); });
+on(“btn-add-step”,“click”,()=>{ state.form.steps.push(””); renderFormPartial(); });
+
+```
+// Import
+on("import-url","input", e=>{ state.importUrl=e.target.value; state.importError="";
+  const btn=document.getElementById("btn-import"); if(btn) btn.disabled=!e.target.value.trim(); });
+on("import-url","keydown", e=>{ if(e.key==="Enter"&&!state.importing) doImport(); });
+on("btn-import","click", doImport);
+
+// Form fields
+const fields=["title","category","time","tags","sourceUrl"];
+fields.forEach(f=>{ const el=document.getElementById("f-"+f); if(el) el.addEventListener("input",e=>{ state.form[f]=e.target.value; if(f==="category"||f==="title"){} }); });
+const favEl=document.getElementById("f-fav"); if(favEl) favEl.addEventListener("change",e=>{ state.form.favorite=e.target.checked; });
+
+// Ingredient fields
+onAll("[data-ing]","input", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
+onAll("[data-ing]","change", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
+onAll("[data-remove-ing]","click", e=>{ const i=Number(e.target.dataset.removeIng); state.form.ingredients.splice(i,1); if(!state.form.ingredients.length) state.form.ingredients.push(emptyIng()); renderFormPartial(); });
+
+// Step fields
+onAll("[data-step]","input", e=>{ state.form.steps[Number(e.target.dataset.step)]=e.target.value; });
+onAll("[data-remove-step]","click", e=>{ const i=Number(e.target.dataset.removeStep); state.form.steps.splice(i,1); if(!state.form.steps.length) state.form.steps.push(""); renderFormPartial(); });
+
+// Emoji
+onAll("[data-emoji]","click", e=>{ state.form.emoji=e.target.dataset.emoji; document.querySelectorAll("[data-emoji]").forEach(b=>b.classList.toggle("sel",b.dataset.emoji===state.form.emoji)); });
+```
+
+}
+}
+
+function renderScheduleOnly() {
+const r = state.recipes.find(r=>r.id===state.selectedId);
+if (!r) return;
+const box = document.querySelector(”.schedule-box”);
+if (!box) return;
+const newHtml = renderSchedule(r);
+const tmp = document.createElement(“div”);
+tmp.innerHTML = newHtml;
+box.replaceWith(tmp.firstElementChild);
+// Rebind schedule inputs
+const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};
+on(“sched-day”,“change”,e=>{state.schedEndDay=Number(e.target.value);renderScheduleOnly();});
+on(“sched-hour”,“change”,e=>{state.schedEndHour=Number(e.target.value);renderScheduleOnly();});
+on(“sched-min”,“change”,e=>{state.schedEndMinute=Number(e.target.value);renderScheduleOnly();});
+on(“sched-ampm”,“change”,e=>{state.schedEndAmpm=e.target.value;renderScheduleOnly();});
+document.querySelectorAll(”[data-dur]”).forEach(el=>el.addEventListener(“input”,e=>{
+const i=Number(e.target.dataset.dur);
+state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
+renderScheduleOnly();
+}));
+}
+
+function renderFormPartial() {
+// Re-render just ingredient and step rows without losing other field values
+syncFormFields();
+const ingContainer = document.getElementById(“ing-rows”);
+const stepContainer = document.getElementById(“step-rows”);
+if (ingContainer) {
+ingContainer.innerHTML = state.form.ingredients.map((ing,i)=>` <div class="ing-form-grid"> <input data-ing="${i}" data-field="name" placeholder="Flour" value="${esc(ing.name)}"/> <input data-ing="${i}" data-field="cups" placeholder="2" value="${esc(ing.cups)}"/> <select data-ing="${i}" data-field="cupsUnit">${CUP_UNITS.map(u=>`<option${ing.cupsUnit===u?” selected”:””}>${u}</option>`).join("")}</select> <input data-ing="${i}" data-field="grams" placeholder="240" value="${esc(ing.grams)}"/> <select data-ing="${i}" data-field="gramsUnit">${GRAM_UNITS.map(u=>`<option${ing.gramsUnit===u?” selected”:””}>${u}</option>`).join("")}</select> <button class="remove-btn" data-remove-ing="${i}">×</button> </div>`).join(””);
+}
+if (stepContainer) {
+stepContainer.innerHTML = state.form.steps.map((s,i)=>` <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px"> <div style="background:var(--accent-light);color:var(--accent);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:11px">${i+1}</div> <textarea data-step="${i}" placeholder="Step ${i+1}…" style="min-height:60px;font-size:14px">${esc(s)}</textarea> <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button> </div>`).join(””);
+}
+// Rebind
+document.querySelectorAll(”[data-ing]”).forEach(el=>{ el.addEventListener(el.tagName===“SELECT”?“change”:“input”,e=>{const i=Number(e.target.dataset.ing),f=e.target.dataset.field;state.form.ingredients[i][f]=e.target.value;}); });
+document.querySelectorAll(”[data-remove-ing]”).forEach(el=>el.addEventListener(“click”,e=>{const i=Number(e.target.dataset.removeIng);state.form.ingredients.splice(i,1);if(!state.form.ingredients.length)state.form.ingredients.push(emptyIng());renderFormPartial();}));
+document.querySelectorAll(”[data-step]”).forEach(el=>el.addEventListener(“input”,e=>{state.form.steps[Number(e.target.dataset.step)]=e.target.value;}));
+document.querySelectorAll(”[data-remove-step]”).forEach(el=>el.addEventListener(“click”,e=>{const i=Number(e.target.dataset.removeStep);state.form.steps.splice(i,1);if(!state.form.steps.length)state.form.steps.push(””);renderFormPartial();}));
+}
+
+function syncFormFields() {
+const get = id => { const el=document.getElementById(id); return el?el.value:null; };
+const fields = [“title”,“category”,“time”,“tags”,“sourceUrl”];
+fields.forEach(f=>{ const v=get(“f-”+f); if(v!==null) state.form[f]=v; });
+const fav=document.getElementById(“f-fav”); if(fav) state.form.favorite=fav.checked;
+}
+
+function toggleFav(id) {
+state.recipes = state.recipes.map(r=>r.id===id?{…r,favorite:!r.favorite}:r);
+saveRecipes();
+if(state.selectedId===id) { const r=state.recipes.find(r=>r.id===id); document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>b.textContent=r.favorite?“❤️”:“🤍”); }
+else render();
+}
+
+function saveRecipe() {
+syncFormFields();
+const f = state.form;
+if (!f.title.trim()) { showToast(“Please enter a recipe name”); return; }
+const cleaned = {…f, ingredients:f.ingredients.filter(i=>i.name.trim()), steps:f.steps.filter(s=>s.trim())};
+if (state.formMode===“edit”) {
+state.recipes = state.recipes.map(r=>r.id===state.selectedId?{…r,…cleaned}:r);
+saveRecipes(); state.view=“detail”; render(); showToast(“Recipe updated”);
+} else {
+state.recipes = [{…cleaned, id:Date.now()}, …state.recipes];
+saveRecipes(); state.view=“grid”; render(); showToast(“Recipe added”);
+}
+}
+
+async function doImport() {
+const urlEl = document.getElementById(“import-url”);
+const url = urlEl ? urlEl.value.trim() : “”;
+if (!url) return;
+state.importing=true; state.importError=””; state.importUrl=url;
+render();
+try {
+const prompt = `You are a recipe extraction assistant. Use web search to fetch and read the content at this URL, then extract the recipe and return ONLY a raw JSON object (no markdown, no backticks, no explanation).
 
 URL: ${url}
 
-Return ONLY a raw JSON object (no markdown, no backticks, no explanation) with these exact fields:
-{
-“title”: “Recipe name”,
-“category”: “One of: Breakfast, Lunch, Dinner, Dessert, Snacks, Drinks, Soups, Salads, Baking, Sourdough, Other”,
-“tags”: “comma-separated tags like easy, vegetarian, quick”,
-“time”: “total time e.g. 45m or 1h 30m”,
-“emoji”: “a single relevant emoji”,
-“ingredients”: [
-{ “name”: “Ingredient name”, “cups”: “amount in cups/tbsp/tsp”, “cupsUnit”: “cup or tbsp or tsp or oz or lb or pinch or to taste or whole or slice or clove or handful”, “grams”: “amount in grams or ml”, “gramsUnit”: “g or kg or ml or L or pinch or to taste or whole or slice or clove or handful” }
-],
-“steps”: [“Step 1 text”, “Step 2 text”]
-}
-If you cannot find a specific field, use an empty string or empty array. Convert all ingredient amounts to both cups/tbsp/tsp AND grams/ml as accurately as possible.`;
+Return exactly this structure:
+{“title”:“Recipe name”,“category”:“One of: Breakfast,Lunch,Dinner,Dessert,Snacks,Drinks,Soups,Salads,Baking,Sourdough,Other”,“tags”:“comma-separated tags”,“time”:“e.g. 45m”,“emoji”:“single emoji”,“ingredients”:[{“name”:””,“cups”:””,“cupsUnit”:“cup”,“grams”:””,“gramsUnit”:“g”}],“steps”:[“Step 1”,“Step 2”]}
+
+Convert all ingredient amounts to both cups/tbsp/tsp AND grams/ml.`;
 
 ```
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "anthropic-dangerous-direct-browser-access": "true" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4000,
-      tools: [{ type: "web_search_20250305", name: "web_search" }],
-      messages: [{ role: "user", content: prompt }]
-    })
-  });
-  if (!response.ok) { const e = await response.json().catch(() => ({})); throw new Error(e.error?.message || `Error ${response.status}`); }
-  const data = await response.json();
-  const text = data.content.filter(b => b.type === "text").map(b => b.text).join("");
-  const clean = text.replace(/```json|```/g, "").trim();
-  const start = clean.indexOf("{"); const end = clean.lastIndexOf("}");
-  if (start === -1 || end === -1) throw new Error("No JSON found");
-  return JSON.parse(clean.slice(start, end + 1));
-}
-
-function App() {
-  const [recipes, setRecipes] = useState([]);
-  const [view, setView] = useState("grid");
-  const [selected, setSelected] = useState(null);
-  const [search, setSearch] = useState("");
-  const [filterCat, setFilterCat] = useState("All");
-  const [filterFav, setFilterFav] = useState(false);
-  const [form, setForm] = useState(emptyForm());
-  const [toast, setToast] = useState(null);
-  const [unitMode, setUnitMode] = useState("cups");
-  const [importUrl, setImportUrl] = useState("");
-  const [importing, setImporting] = useState(false);
-  const [importError, setImportError] = useState("");
-
-  useEffect(() => {
-    try { const s = localStorage.getItem(STORAGE_KEY); setRecipes(s ? JSON.parse(s) : SAMPLE_RECIPES); }
-    catch { setRecipes(SAMPLE_RECIPES); }
-  }, []);
-  useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes)); } catch {} }, [recipes]);
-
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
-
-  const handleImport = async () => {
-    if (!importUrl.trim()) return;
-    setImporting(true); setImportError("");
-    try {
-      const data = await importRecipeFromUrl(importUrl.trim());
-      setForm({ ...emptyForm(), ...data, sourceUrl: importUrl.trim(), ingredients: data.ingredients?.length ? data.ingredients : [emptyIng()], steps: data.steps?.length ? data.steps : [""], favorite: false });
-      setImportUrl("");
-      showToast("Recipe imported — review and save ✓");
-    } catch { setImportError("Couldn't import that URL. Try another or fill in manually."); }
-    setImporting(false);
-  };
-
-  const filtered = recipes.filter(r => {
-    const q = search.toLowerCase();
-    const ingText = (r.ingredients||[]).map(i => i.name).join(" ").toLowerCase();
-    return (!q || r.title.toLowerCase().includes(q) || (r.tags||"").toLowerCase().includes(q) || ingText.includes(q))
-      && (filterCat === "All" || r.category === filterCat)
-      && (!filterFav || r.favorite);
-  });
-
-  const toggleFav = (id) => { setRecipes(rs => rs.map(r => r.id === id ? {...r, favorite: !r.favorite} : r)); if (selected?.id === id) setSelected(s => ({...s, favorite: !s.favorite})); };
-  const deleteRecipe = (id) => { setRecipes(rs => rs.filter(r => r.id !== id)); setView("grid"); setSelected(null); showToast("Recipe deleted"); };
-  const saveRecipe = () => {
-    if (!form.title.trim()) { showToast("Please enter a recipe name"); return; }
-    const cleaned = {...form, ingredients: form.ingredients.filter(i => i.name.trim()), steps: form.steps.filter(s => s.trim())};
-    if (view === "edit") { const u = {...selected, ...cleaned}; setRecipes(rs => rs.map(r => r.id === selected.id ? u : r)); setSelected(u); setView("detail"); showToast("Recipe updated"); }
-    else { setRecipes(rs => [{...cleaned, id: Date.now()}, ...rs]); setView("grid"); showToast("Recipe added"); }
-  };
-  const openAdd = () => { setForm(emptyForm()); setImportUrl(""); setImportError(""); setView("add"); };
-  const openEdit = () => { setForm({...selected, ingredients: selected.ingredients?.length ? selected.ingredients : [emptyIng()], steps: selected.steps?.length ? selected.steps : [""]}); setImportError(""); setView("edit"); };
-  const openDetail = (r) => { setSelected(r); setView("detail"); };
-
-  const updateIng = (i, f, v) => setForm(fm => { const a = [...fm.ingredients]; a[i] = {...a[i], [f]: v}; return {...fm, ingredients: a}; });
-  const addIng = () => setForm(f => ({...f, ingredients: [...f.ingredients, emptyIng()]}));
-  const removeIng = (i) => setForm(f => ({...f, ingredients: f.ingredients.filter((_,j) => j !== i)}));
-  const updateStep = (i, v) => setForm(f => { const s = [...f.steps]; s[i] = v; return {...f, steps: s}; });
-  const addStep = () => setForm(f => ({...f, steps: [...f.steps, ""]}));
-  const removeStep = (i) => setForm(f => ({...f, steps: f.steps.filter((_,j) => j !== i)}));
-  const ingDisplay = (ing) => unitMode === "grams" ? `${ing.grams||"—"} ${ing.gramsUnit}` : `${ing.cups||"—"} ${ing.cupsUnit}`;
-  const hostname = (url) => { try { return new URL(url).hostname.replace("www.",""); } catch { return url; } };
-
-  return (
-    <div style={{minHeight:"100vh", background:"var(--bg)"}}>
-
-      {/* HEADER */}
-      <header style={{background:"var(--surface)", borderBottom:"1.5px solid var(--border)", padding:"0 28px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:100, boxShadow:"0 1px 0 var(--border)"}}>
-        <div style={{display:"flex", alignItems:"center", gap:10}}>
-          <span style={{fontSize:24}}>🍽️</span>
-          <span style={{fontFamily:"'DM Serif Display', serif", fontSize:22, color:"var(--text)", letterSpacing:"-0.02em"}}>Recipes</span>
-        </div>
-        <button className="btn btn-primary" onClick={openAdd}>
-          <span style={{fontSize:16, lineHeight:1}}>+</span> New Recipe
-        </button>
-      </header>
-
-      <main style={{maxWidth:1080, margin:"0 auto", padding:"28px 20px"}}>
-
-        {/* GRID */}
-        {view === "grid" && <>
-          <div style={{display:"flex", gap:10, marginBottom:16, flexWrap:"wrap"}}>
-            <div style={{flex:1, minWidth:200, position:"relative"}}>
-              <span style={{position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", color:"var(--text-tertiary)", fontSize:15}}>⌕</span>
-              <input className="input" style={{paddingLeft:34}} placeholder="Search recipes, ingredients, tags…" value={search} onChange={e => setSearch(e.target.value)} />
-            </div>
-            <button className={`btn ${filterFav ? "btn-primary" : "btn-ghost"}`} onClick={() => setFilterFav(f => !f)}>
-              {filterFav ? "❤️" : "♡"} Favorites
-            </button>
-          </div>
-
-          <div style={{display:"flex", gap:6, flexWrap:"wrap", marginBottom:28, overflowX:"auto", paddingBottom:4}}>
-            {["All",...CATEGORIES].map(c => <button key={c} className={`cat-chip ${filterCat===c?"active":""}`} onClick={() => setFilterCat(c)}>{c}</button>)}
-          </div>
-
-          {filtered.length === 0 ? (
-            <div style={{textAlign:"center", padding:"80px 0", color:"var(--text-tertiary)"}}>
-              <div style={{fontSize:48, marginBottom:16}}>🍽️</div>
-              <div style={{fontFamily:"'DM Serif Display', serif", fontSize:22, color:"var(--text-secondary)", marginBottom:8}}>No recipes found</div>
-              <div style={{fontSize:14}}>Try a different search or add a new recipe</div>
-            </div>
-          ) : (
-            <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(270px, 1fr))", gap:18}}>
-              {filtered.map(r => (
-                <div key={r.id} className="card" onClick={() => openDetail(r)} style={{padding:"22px 20px 18px"}}>
-                  <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14}}>
-                    <div style={{width:48, height:48, background:"var(--bg)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"center", fontSize:26}}>{r.emoji||"🍽️"}</div>
-                    <button className="fav-btn" onClick={e => {e.stopPropagation(); toggleFav(r.id);}}>{r.favorite?"❤️":"🤍"}</button>
-                  </div>
-                  <div style={{fontFamily:"'DM Serif Display', serif", fontSize:18, lineHeight:1.25, marginBottom:8, color:"var(--text)"}}>{r.title}</div>
-                  <div style={{display:"flex", gap:5, flexWrap:"wrap", marginBottom:10}}>
-                    <span className="tag tag-accent">{r.category}</span>
-                    {r.time && <span className="tag">⏱ {r.time}</span>}
-                  </div>
-                  <div style={{fontSize:12, color:"var(--text-tertiary)", marginBottom:10, lineHeight:1.5}}>
-                    {(r.ingredients||[]).slice(0,3).map(i=>i.name).filter(Boolean).join(" · ")}
-                    {(r.ingredients||[]).length > 3 ? ` +${r.ingredients.length-3}` : ""}
-                  </div>
-                  {r.tags && <div style={{display:"flex", flexWrap:"wrap", gap:3}}>
-                    {r.tags.split(",").filter(Boolean).slice(0,3).map(t => <span key={t} className="tag" style={{fontSize:11}}>{t.trim()}</span>)}
-                  </div>}
-                  {r.sourceUrl && <div style={{fontSize:11, color:"var(--text-tertiary)", marginTop:10, display:"flex", alignItems:"center", gap:4}}>
-                    <span>🔗</span>{hostname(r.sourceUrl)}
-                  </div>}
-                </div>
-              ))}
-            </div>
-          )}
-        </>}
-
-        {/* DETAIL */}
-        {view === "detail" && selected && (
-          <div style={{maxWidth:680, margin:"0 auto"}}>
-            <button className="btn btn-ghost" onClick={() => setView("grid")} style={{marginBottom:20}}>← Back</button>
-            <div style={{background:"var(--surface)", border:"1.5px solid var(--border)", borderRadius:var(--radius-lg), padding:"32px 28px", boxShadow:"var(--shadow)"}}>
-              <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:20}}>
-                <div style={{width:64, height:64, background:"var(--bg)", borderRadius:16, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36}}>{selected.emoji||"🍽️"}</div>
-                <button className="fav-btn" style={{fontSize:24}} onClick={() => toggleFav(selected.id)}>{selected.favorite?"❤️":"🤍"}</button>
-              </div>
-              <h1 style={{fontFamily:"'DM Serif Display', serif", fontSize:30, lineHeight:1.2, marginBottom:12, color:"var(--text)"}}>{selected.title}</h1>
-              <div style={{display:"flex", gap:6, flexWrap:"wrap", marginBottom:16}}>
-                <span className="tag tag-accent" style={{fontSize:13}}>{selected.category}</span>
-                {selected.time && <span className="tag" style={{fontSize:13}}>⏱ {selected.time}</span>}
-                {selected.tags && selected.tags.split(",").filter(Boolean).map(t => <span key={t} className="tag" style={{fontSize:13}}>{t.trim()}</span>)}
-              </div>
-              {selected.sourceUrl && (
-                <div style={{marginBottom:20}}>
-                  <a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer" className="source-link">
-                    🔗 View on {hostname(selected.sourceUrl)}
-                  </a>
-                </div>
-              )}
-
-              <hr className="divider" />
-
-              {/* Ingredients */}
-              <div style={{marginBottom:24}}>
-                <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14}}>
-                  <h2 style={{fontFamily:"'DM Serif Display', serif", fontSize:20, color:"var(--text)"}}>Ingredients</h2>
-                  <div className="unit-toggle">
-                    <button className={unitMode==="cups"?"active":""} onClick={() => setUnitMode("cups")}>Cups</button>
-                    <button className={unitMode==="grams"?"active":""} onClick={() => setUnitMode("grams")}>Grams</button>
-                  </div>
-                </div>
-                <div style={{background:"var(--bg)", borderRadius:10, padding:"0 16px"}}>
-                  {(selected.ingredients||[]).map((ing,i) => (
-                    <div key={i} className="ing-list-item">
-                      <div className="ing-dot"></div>
-                      <div style={{flex:1, color:"var(--text)"}}>{ing.name}</div>
-                      <div style={{color:"var(--accent)", fontWeight:600, fontSize:14, whiteSpace:"nowrap"}}>{ingDisplay(ing)}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <hr className="divider" style={{margin:"0 0 24px"}} />
-
-              {/* Instructions */}
-              <div style={{marginBottom:28}}>
-                <h2 style={{fontFamily:"'DM Serif Display', serif", fontSize:20, color:"var(--text)", marginBottom:16}}>Instructions</h2>
-                {(selected.steps||[]).map((step,i) => (
-                  <div key={i} className="step-display">
-                    <div className="step-num">{i+1}</div>
-                    <div style={{fontSize:15, color:"var(--text)", lineHeight:1.7, paddingTop:3}}>{step}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{display:"flex", gap:8}}>
-                <button className="btn btn-primary" onClick={openEdit}>Edit Recipe</button>
-                <button className="btn btn-danger" onClick={() => deleteRecipe(selected.id)}>Delete</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ADD / EDIT FORM */}
-        {(view==="add"||view==="edit") && (
-          <div style={{maxWidth:720, margin:"0 auto"}}>
-            <button className="btn btn-ghost" onClick={() => setView(view==="edit"?"detail":"grid")} style={{marginBottom:20}}>← Back</button>
-            <div style={{background:"var(--surface)", border:"1.5px solid var(--border)", borderRadius:"var(--radius-lg)", padding:"28px 24px", boxShadow:"var(--shadow)"}}>
-              <h2 style={{fontFamily:"'DM Serif Display', serif", fontSize:26, marginBottom:24, color:"var(--text)"}}>{view==="edit"?"Edit Recipe":"New Recipe"}</h2>
-
-              {/* Import */}
-              {view==="add" && (
-                <div className="import-box">
-                  <div style={{fontWeight:600, fontSize:14, color:"var(--accent)", marginBottom:6}}>✦ Import from URL</div>
-                  <div style={{fontSize:13, color:"var(--text-secondary)", marginBottom:12}}>Paste any recipe link and AI will fill in the form automatically.</div>
-                  <div className="import-row">
-                    <input className="input" placeholder="https://..." value={importUrl} onChange={e => {setImportUrl(e.target.value); setImportError("");}} onKeyDown={e => e.key==="Enter" && !importing && handleImport()} disabled={importing} />
-                    <button className="btn btn-primary" onClick={handleImport} disabled={importing||!importUrl.trim()} style={{whiteSpace:"nowrap", minWidth:100}}>
-                      {importing ? <><span className="spinner"></span> Importing</> : "Import"}
-                    </button>
-                  </div>
-                  {importError && <div style={{fontSize:12, color:"var(--danger)", marginTop:8}}>⚠ {importError}</div>}
-                </div>
-              )}
-
-              <div style={{marginBottom:16}}>
-                <label className="form-label">Source URL</label>
-                <input className="input" placeholder="https://..." value={form.sourceUrl||""} onChange={e => setForm(f => ({...f, sourceUrl: e.target.value}))} />
-              </div>
-
-              <div style={{marginBottom:16}}>
-                <label className="form-label">Recipe Name *</label>
-                <input className="input" placeholder="e.g. Sourdough Discard Pancakes" value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} />
-              </div>
-
-              <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:16}}>
-                <div>
-                  <label className="form-label">Category</label>
-                  <select className="input" value={form.category} onChange={e => setForm(f => ({...f, category: e.target.value}))}>
-                    {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="form-label">Cook Time</label>
-                  <input className="input" placeholder="e.g. 45m or 1h 30m" value={form.time} onChange={e => setForm(f => ({...f, time: e.target.value}))} />
-                </div>
-              </div>
-
-              <div style={{marginBottom:16}}>
-                <label className="form-label">Emoji</label>
-                <div style={{display:"flex", flexWrap:"wrap", gap:4}}>
-                  {EMOJI_LIST.map(e => <button key={e} className={`emoji-btn ${form.emoji===e?"sel":""}`} onClick={() => setForm(f => ({...f, emoji: e}))}>{e}</button>)}
-                </div>
-              </div>
-
-              <div style={{marginBottom:16}}>
-                <label className="form-label">Tags</label>
-                <input className="input" placeholder="e.g. easy, vegetarian, quick" value={form.tags} onChange={e => setForm(f => ({...f, tags: e.target.value}))} />
-              </div>
-
-              {/* Ingredients */}
-              <div style={{marginBottom:20}}>
-                <label className="form-label" style={{marginBottom:10}}>Ingredients</label>
-                <div style={{display:"grid", gridTemplateColumns:"1fr 70px 78px 70px 70px 28px", gap:5, marginBottom:6}}>
-                  {["Ingredient","Cups/Amt","Unit","Grams","Unit",""].map((l,i) => <div key={i} style={{fontSize:10, fontWeight:600, color:"var(--text-tertiary)", textTransform:"uppercase", letterSpacing:"0.05em"}}>{l}</div>)}
-                </div>
-                {form.ingredients.map((ing,i) => (
-                  <div key={i} style={{display:"grid", gridTemplateColumns:"1fr 70px 78px 70px 70px 28px", gap:5, marginBottom:5}}>
-                    <input className="input" style={{padding:"8px 10px", fontSize:14}} placeholder="Flour" value={ing.name} onChange={e => updateIng(i,"name",e.target.value)} />
-                    <input className="input" style={{padding:"8px", fontSize:14}} placeholder="2" value={ing.cups} onChange={e => updateIng(i,"cups",e.target.value)} />
-                    <select className="input" style={{padding:"8px 4px", fontSize:13}} value={ing.cupsUnit} onChange={e => updateIng(i,"cupsUnit",e.target.value)}>
-                      {CUP_UNITS.map(u => <option key={u}>{u}</option>)}
-                    </select>
-                    <input className="input" style={{padding:"8px", fontSize:14}} placeholder="240" value={ing.grams} onChange={e => updateIng(i,"grams",e.target.value)} />
-                    <select className="input" style={{padding:"8px 4px", fontSize:13}} value={ing.gramsUnit} onChange={e => updateIng(i,"gramsUnit",e.target.value)}>
-                      {GRAM_UNITS.map(u => <option key={u}>{u}</option>)}
-                    </select>
-                    <button className="remove-btn" onClick={() => removeIng(i)}>×</button>
-                  </div>
-                ))}
-                <button className="add-row-btn" onClick={addIng}>+ Add Ingredient</button>
-              </div>
-
-              {/* Steps */}
-              <div style={{marginBottom:22}}>
-                <label className="form-label" style={{marginBottom:10}}>Instructions</label>
-                {form.steps.map((step,i) => (
-                  <div key={i} className="step-row">
-                    <div className="step-num-edit">{i+1}</div>
-                    <textarea className="input" style={{fontSize:14, minHeight:60}} placeholder={`Step ${i+1}…`} value={step} onChange={e => updateStep(i,e.target.value)} />
-                    <button className="remove-btn" onClick={() => removeStep(i)} style={{marginTop:11}}>×</button>
-                  </div>
-                ))}
-                <button className="add-row-btn" onClick={addStep}>+ Add Step</button>
-              </div>
-
-              <div style={{display:"flex", alignItems:"center", gap:8, marginBottom:24}}>
-                <input type="checkbox" id="fav" checked={form.favorite} onChange={e => setForm(f => ({...f, favorite: e.target.checked}))} style={{width:16, height:16, accentColor:"var(--accent)", cursor:"pointer"}} />
-                <label htmlFor="fav" style={{fontSize:14, fontWeight:500, cursor:"pointer", userSelect:"none"}}>Mark as favorite</label>
-              </div>
-
-              <div style={{display:"flex", gap:8}}>
-                <button className="btn btn-primary" onClick={saveRecipe} style={{fontSize:15, padding:"11px 24px"}}>{view==="edit"?"Save Changes":"Add Recipe"}</button>
-                <button className="btn btn-ghost" onClick={() => setView(view==="edit"?"detail":"grid")}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
-      {toast && <div className="toast">{toast}</div>}
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+const response = await fetch("https://api.anthropic.com/v1/messages", {
+  method:"POST",
+  headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+  body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:prompt}]})
+});
+if (!response.ok) { const e=await response.json().catch(()=>({})); throw new Error(e.error?.message||`Error ${response.status}`); }
+const data = await response.json();
+const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+const clean = text.replace(/```json|```/g,"").trim();
+const start=clean.indexOf("{"), end=clean.lastIndexOf("}");
+if(start===-1||end===-1) throw new Error("No JSON found");
+const parsed = JSON.parse(clean.slice(start,end+1));
+state.form = {...emptyForm(), ...parsed, sourceUrl:url, ingredients:parsed.ingredients?.length?parsed.ingredients:[emptyIng()], steps:parsed.steps?.length?parsed.steps:[""], favorite:false};
+state.importUrl=""; state.importError=""; state.importing=false;
+render(); showToast("Recipe imported — review and save ✓");
 ```
 
-  </script>
+} catch(e) {
+state.importError=“Couldn’t import that URL. Try another or fill in manually.”;
+state.importing=false; render();
+}
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+state.recipes = loadRecipes();
+render();
+</script>
+
 </body>
 </html>
