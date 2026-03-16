@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -410,283 +409,283 @@ function renderForm() {
     <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
       <div style="background:var(--accent-light);color:var(--accent);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:11px">${i+1}</div>
       <textarea data-step="${i}" placeholder="Step ${i+1}…" style="min-height:60px;font-size:14px">${esc(s)}</textarea>
+      <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button>
+    </div>`).join("");
 
-```
-  <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button>
-</div>`).join("");
-```
+  const emojiBtns = EMOJI_LIST.map(e=>`<button class="emoji-btn${f.emoji===e?" sel":""}" data-emoji="${e}">${e}</button>`).join("");
 
-const emojiBtns = EMOJI_LIST.map(e=>`<button class="emoji-btn${f.emoji===e?" sel":""}" data-emoji="${e}">${e}</button>`).join(””);
+  return `
+    <div style="max-width:720px;margin:0 auto">
+      <button class="btn btn-ghost" id="btn-back" style="margin-bottom:20px">← Back</button>
+      <div class="panel" style="padding:28px 24px">
+        <h2 class="serif" style="font-size:26px;margin-bottom:24px">${isEdit?"Edit Recipe":"New Recipe"}</h2>
 
-return `
-<div style="max-width:720px;margin:0 auto">
-<button class="btn btn-ghost" id="btn-back" style="margin-bottom:20px">← Back</button>
-<div class="panel" style="padding:28px 24px">
-<h2 class="serif" style="font-size:26px;margin-bottom:24px">${isEdit?“Edit Recipe”:“New Recipe”}</h2>
+        ${!isEdit?`
+        <div class="import-box">
+          <div style="font-weight:600;font-size:14px;color:var(--accent);margin-bottom:6px">✦ Import from URL</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Paste any recipe link and AI will fill in the form automatically.</div>
+          <div class="import-row">
+            <input id="import-url" placeholder="https://..." value="${esc(state.importUrl||"")}" ${state.importing?"disabled":""}/>
+            <button class="btn btn-primary" id="btn-import" ${state.importing||!state.importUrl?"disabled":""} style="white-space:nowrap;min-width:100px">
+              ${state.importing?'<span class="spinner"></span> Importing':"Import"}
+            </button>
+          </div>
+          ${state.importError?`<div style="font-size:12px;color:var(--danger);margin-top:8px">⚠ ${esc(state.importError)}</div>`:""}
+        </div>`:""}
 
-```
-    ${!isEdit?`
-    <div class="import-box">
-      <div style="font-weight:600;font-size:14px;color:var(--accent);margin-bottom:6px">✦ Import from URL</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Paste any recipe link and AI will fill in the form automatically.</div>
-      <div class="import-row">
-        <input id="import-url" placeholder="https://..." value="${esc(state.importUrl||"")}" ${state.importing?"disabled":""}/>
-        <button class="btn btn-primary" id="btn-import" ${state.importing||!state.importUrl?"disabled":""} style="white-space:nowrap;min-width:100px">
-          ${state.importing?'<span class="spinner"></span> Importing':"Import"}
-        </button>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Source URL (optional)</label>
+          <input id="f-sourceUrl" placeholder="https://..." value="${esc(f.sourceUrl||"")}"/>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Recipe Name *</label>
+          <input id="f-title" placeholder="e.g. Sourdough Discard Pancakes" value="${esc(f.title)}"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div>
+            <label class="form-label">Category</label>
+            <select id="f-category">${catOptions}</select>
+          </div>
+          <div>
+            <label class="form-label">Cook Time</label>
+            <input id="f-time" placeholder="e.g. 45m or 1h 30m" value="${esc(f.time)}"/>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Emoji</label>
+          <div style="display:flex;flex-wrap:wrap;gap:4px">${emojiBtns}</div>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Tags</label>
+          <input id="f-tags" placeholder="e.g. easy, vegetarian, quick" value="${esc(f.tags)}"/>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <label class="form-label" style="margin-bottom:10px">Ingredients</label>
+          <div class="ing-form-grid" style="margin-bottom:6px">
+            ${["Ingredient","Cups/Amt","Unit","Grams","Unit",""].map(l=>`<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">${l}</div>`).join("")}
+          </div>
+          <div id="ing-rows">${ingRows}</div>
+          <button class="add-row-btn" id="btn-add-ing">+ Add Ingredient</button>
+        </div>
+
+        <div style="margin-bottom:22px">
+          <label class="form-label" style="margin-bottom:10px">Instructions</label>
+          <div id="step-rows">${stepRows}</div>
+          <button class="add-row-btn" id="btn-add-step">+ Add Step</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
+          <input type="checkbox" id="f-fav" ${f.favorite?"checked":""} style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer"/>
+          <label for="f-fav" style="font-size:14px;font-weight:500;cursor:pointer;user-select:none">Mark as favorite</label>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" id="btn-save" style="font-size:15px;padding:11px 24px">${isEdit?"Save Changes":"Add Recipe"}</button>
+          <button class="btn btn-ghost" id="btn-cancel">Cancel</button>
+        </div>
       </div>
-      ${state.importError?`<div style="font-size:12px;color:var(--danger);margin-top:8px">⚠ ${esc(state.importError)}</div>`:""}
-    </div>`:""}
-
-    <div style="margin-bottom:16px">
-      <label class="form-label">Source URL (optional)</label>
-      <input id="f-sourceUrl" placeholder="https://..." value="${esc(f.sourceUrl||"")}"/>
-    </div>
-    <div style="margin-bottom:16px">
-      <label class="form-label">Recipe Name *</label>
-      <input id="f-title" placeholder="e.g. Sourdough Discard Pancakes" value="${esc(f.title)}"/>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-      <div>
-        <label class="form-label">Category</label>
-        <select id="f-category">${catOptions}</select>
-      </div>
-      <div>
-        <label class="form-label">Cook Time</label>
-        <input id="f-time" placeholder="e.g. 45m or 1h 30m" value="${esc(f.time)}"/>
-      </div>
-    </div>
-    <div style="margin-bottom:16px">
-      <label class="form-label">Emoji</label>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${emojiBtns}</div>
-    </div>
-    <div style="margin-bottom:16px">
-      <label class="form-label">Tags</label>
-      <input id="f-tags" placeholder="e.g. easy, vegetarian, quick" value="${esc(f.tags)}"/>
-    </div>
-
-    <div style="margin-bottom:20px">
-      <label class="form-label" style="margin-bottom:10px">Ingredients</label>
-      <div class="ing-form-grid" style="margin-bottom:6px">
-        ${["Ingredient","Cups/Amt","Unit","Grams","Unit",""].map(l=>`<div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">${l}</div>`).join("")}
-      </div>
-      <div id="ing-rows">${ingRows}</div>
-      <button class="add-row-btn" id="btn-add-ing">+ Add Ingredient</button>
-    </div>
-
-    <div style="margin-bottom:22px">
-      <label class="form-label" style="margin-bottom:10px">Instructions</label>
-      <div id="step-rows">${stepRows}</div>
-      <button class="add-row-btn" id="btn-add-step">+ Add Step</button>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
-      <input type="checkbox" id="f-fav" ${f.favorite?"checked":""} style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer"/>
-      <label for="f-fav" style="font-size:14px;font-weight:500;cursor:pointer;user-select:none">Mark as favorite</label>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-primary" id="btn-save" style="font-size:15px;padding:11px 24px">${isEdit?"Save Changes":"Add Recipe"}</button>
-      <button class="btn btn-ghost" id="btn-cancel">Cancel</button>
-    </div>
-  </div>
-</div>`;
-```
-
+    </div>`;
 }
 
 // ─── Events ───────────────────────────────────────────────────────────────────
 function bindEvents() {
-const on = (id, ev, fn) => { const el=document.getElementById(id); if(el) el.addEventListener(ev, fn); };
-const onAll = (sel, ev, fn) => document.querySelectorAll(sel).forEach(el=>el.addEventListener(ev,fn));
+  const on = (id, ev, fn) => { const el=document.getElementById(id); if(el) el.addEventListener(ev, fn); };
+  const onAll = (sel, ev, fn) => document.querySelectorAll(sel).forEach(el=>el.addEventListener(ev,fn));
 
-// Header
-document.getElementById(“btn-new”).onclick = () => {
-state.form = emptyForm(); state.formMode = “add”; state.importUrl = “”; state.importError = “”;
-state.view = “form”; render();
-};
+  // Header
+  document.getElementById("btn-new").onclick = () => {
+    state.form = emptyForm(); state.formMode = "add"; state.importUrl = ""; state.importError = "";
+    state.view = "form"; render();
+  };
 
-if (state.view === “grid”) {
-on(“search-input”,“input”, e=>{ state.search=e.target.value; render(); });
-on(“btn-fav”,“click”, ()=>{ state.filterFav=!state.filterFav; render(); });
-onAll(”.cat-chip”,“click”, e=>{ state.filterCat=e.target.dataset.cat; render(); });
-onAll(”[data-recipe]”,“click”, e=>{
-const card = e.target.closest(”[data-recipe]”);
-if(card && !e.target.closest(”[data-fav]”)) { state.selectedId=Number(card.dataset.recipe); state.schedDurations=[]; state.view=“detail”; render(); }
-});
-onAll(”[data-fav]”,“click”, e=>{ e.stopPropagation(); toggleFav(Number(e.currentTarget.dataset.fav)); });
-}
+  if (state.view === "grid") {
+    on("search-input","input", e=>{ state.search=e.target.value; render(); });
+    on("btn-fav","click", ()=>{ state.filterFav=!state.filterFav; render(); });
+    onAll(".cat-chip","click", e=>{ state.filterCat=e.target.dataset.cat; render(); });
+    onAll("[data-recipe]","click", e=>{
+      const card = e.target.closest("[data-recipe]");
+      if(card && !e.target.closest("[data-fav]")) { state.selectedId=Number(card.dataset.recipe); state.schedDurations=[]; state.view="detail"; render(); }
+    });
+    onAll("[data-fav]","click", e=>{ e.stopPropagation(); toggleFav(Number(e.currentTarget.dataset.fav)); });
+  }
 
-if (state.view === “detail”) {
-on(“btn-back”,“click”,()=>{ state.view=“grid”; render(); });
-on(“btn-edit”,“click”,()=>{
-const r=state.recipes.find(r=>r.id===state.selectedId);
-state.form={…r,ingredients:r.ingredients?.length?[…r.ingredients.map(i=>({…i}))]: [emptyIng()],steps:r.steps?.length?[…r.steps]:[””]};
-state.formMode=“edit”; state.importError=””; state.view=“form”; render();
-});
-on(“btn-delete”,“click”,()=>{
-if(confirm(“Delete this recipe?”)) { state.recipes=state.recipes.filter(r=>r.id!==state.selectedId); saveRecipes(); state.view=“grid”; render(); showToast(“Recipe deleted”); }
-});
-onAll(”[data-fav]”,“click”, e=>{ toggleFav(Number(e.currentTarget.dataset.fav)); });
-onAll(”[data-unit]”,“click”, e=>{ state.unitMode=e.target.dataset.unit; render(); });
-// Schedule
-on(“sched-day”,“change”,e=>{ state.schedEndDay=Number(e.target.value); renderScheduleOnly(); });
-on(“sched-hour”,“change”,e=>{ state.schedEndHour=Number(e.target.value); renderScheduleOnly(); });
-on(“sched-min”,“change”,e=>{ state.schedEndMinute=Number(e.target.value); renderScheduleOnly(); });
-on(“sched-ampm”,“change”,e=>{ state.schedEndAmpm=e.target.value; renderScheduleOnly(); });
-onAll(”[data-dur]”,“input”, e=>{
-const i=Number(e.target.dataset.dur);
-state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
-renderScheduleOnly();
-});
-}
+  if (state.view === "detail") {
+    on("btn-back","click",()=>{ state.view="grid"; render(); });
+    on("btn-edit","click",()=>{
+      const r=state.recipes.find(r=>r.id===state.selectedId);
+      state.form={...r,ingredients:r.ingredients?.length?[...r.ingredients.map(i=>({...i}))]: [emptyIng()],steps:r.steps?.length?[...r.steps]:[""]}; 
+      state.formMode="edit"; state.importError=""; state.view="form"; render();
+    });
+    on("btn-delete","click",()=>{
+      if(confirm("Delete this recipe?")) { state.recipes=state.recipes.filter(r=>r.id!==state.selectedId); saveRecipes(); state.view="grid"; render(); showToast("Recipe deleted"); }
+    });
+    onAll("[data-fav]","click", e=>{ toggleFav(Number(e.currentTarget.dataset.fav)); });
+    onAll("[data-unit]","click", e=>{ state.unitMode=e.target.dataset.unit; render(); });
+    // Schedule
+    on("sched-day","change",e=>{ state.schedEndDay=Number(e.target.value); renderScheduleOnly(); });
+    on("sched-hour","change",e=>{ state.schedEndHour=Number(e.target.value); renderScheduleOnly(); });
+    on("sched-min","change",e=>{ state.schedEndMinute=Number(e.target.value); renderScheduleOnly(); });
+    on("sched-ampm","change",e=>{ state.schedEndAmpm=e.target.value; renderScheduleOnly(); });
+    onAll("[data-dur]","input", e=>{
+      const i=Number(e.target.dataset.dur);
+      state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
+      renderScheduleOnly();
+    });
+  }
 
-if (state.view === “form”) {
-on(“btn-back”,“click”,()=>{ state.view=state.formMode===“edit”?“detail”:“grid”; render(); });
-on(“btn-cancel”,“click”,()=>{ state.view=state.formMode===“edit”?“detail”:“grid”; render(); });
-on(“btn-save”,“click”, saveRecipe);
-on(“btn-add-ing”,“click”,()=>{ state.form.ingredients.push(emptyIng()); renderFormPartial(); });
-on(“btn-add-step”,“click”,()=>{ state.form.steps.push(””); renderFormPartial(); });
+  if (state.view === "form") {
+    on("btn-back","click",()=>{ state.view=state.formMode==="edit"?"detail":"grid"; render(); });
+    on("btn-cancel","click",()=>{ state.view=state.formMode==="edit"?"detail":"grid"; render(); });
+    on("btn-save","click", saveRecipe);
+    on("btn-add-ing","click",()=>{ state.form.ingredients.push(emptyIng()); renderFormPartial(); });
+    on("btn-add-step","click",()=>{ state.form.steps.push(""); renderFormPartial(); });
 
-```
-// Import
-on("import-url","input", e=>{ state.importUrl=e.target.value; state.importError="";
-  const btn=document.getElementById("btn-import"); if(btn) btn.disabled=!e.target.value.trim(); });
-on("import-url","keydown", e=>{ if(e.key==="Enter"&&!state.importing) doImport(); });
-on("btn-import","click", doImport);
+    // Import
+    on("import-url","input", e=>{ state.importUrl=e.target.value; state.importError="";
+      const btn=document.getElementById("btn-import"); if(btn) btn.disabled=!e.target.value.trim(); });
+    on("import-url","keydown", e=>{ if(e.key==="Enter"&&!state.importing) doImport(); });
+    on("btn-import","click", doImport);
 
-// Form fields
-const fields=["title","category","time","tags","sourceUrl"];
-fields.forEach(f=>{ const el=document.getElementById("f-"+f); if(el) el.addEventListener("input",e=>{ state.form[f]=e.target.value; if(f==="category"||f==="title"){} }); });
-const favEl=document.getElementById("f-fav"); if(favEl) favEl.addEventListener("change",e=>{ state.form.favorite=e.target.checked; });
+    // Form fields
+    const fields=["title","category","time","tags","sourceUrl"];
+    fields.forEach(f=>{ const el=document.getElementById("f-"+f); if(el) el.addEventListener("input",e=>{ state.form[f]=e.target.value; if(f==="category"||f==="title"){} }); });
+    const favEl=document.getElementById("f-fav"); if(favEl) favEl.addEventListener("change",e=>{ state.form.favorite=e.target.checked; });
 
-// Ingredient fields
-onAll("[data-ing]","input", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
-onAll("[data-ing]","change", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
-onAll("[data-remove-ing]","click", e=>{ const i=Number(e.target.dataset.removeIng); state.form.ingredients.splice(i,1); if(!state.form.ingredients.length) state.form.ingredients.push(emptyIng()); renderFormPartial(); });
+    // Ingredient fields
+    onAll("[data-ing]","input", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
+    onAll("[data-ing]","change", e=>{ const i=Number(e.target.dataset.ing),field=e.target.dataset.field; state.form.ingredients[i][field]=e.target.value; });
+    onAll("[data-remove-ing]","click", e=>{ const i=Number(e.target.dataset.removeIng); state.form.ingredients.splice(i,1); if(!state.form.ingredients.length) state.form.ingredients.push(emptyIng()); renderFormPartial(); });
 
-// Step fields
-onAll("[data-step]","input", e=>{ state.form.steps[Number(e.target.dataset.step)]=e.target.value; });
-onAll("[data-remove-step]","click", e=>{ const i=Number(e.target.dataset.removeStep); state.form.steps.splice(i,1); if(!state.form.steps.length) state.form.steps.push(""); renderFormPartial(); });
+    // Step fields
+    onAll("[data-step]","input", e=>{ state.form.steps[Number(e.target.dataset.step)]=e.target.value; });
+    onAll("[data-remove-step]","click", e=>{ const i=Number(e.target.dataset.removeStep); state.form.steps.splice(i,1); if(!state.form.steps.length) state.form.steps.push(""); renderFormPartial(); });
 
-// Emoji
-onAll("[data-emoji]","click", e=>{ state.form.emoji=e.target.dataset.emoji; document.querySelectorAll("[data-emoji]").forEach(b=>b.classList.toggle("sel",b.dataset.emoji===state.form.emoji)); });
-```
-
-}
+    // Emoji
+    onAll("[data-emoji]","click", e=>{ state.form.emoji=e.target.dataset.emoji; document.querySelectorAll("[data-emoji]").forEach(b=>b.classList.toggle("sel",b.dataset.emoji===state.form.emoji)); });
+  }
 }
 
 function renderScheduleOnly() {
-const r = state.recipes.find(r=>r.id===state.selectedId);
-if (!r) return;
-const box = document.querySelector(”.schedule-box”);
-if (!box) return;
-const newHtml = renderSchedule(r);
-const tmp = document.createElement(“div”);
-tmp.innerHTML = newHtml;
-box.replaceWith(tmp.firstElementChild);
-// Rebind schedule inputs
-const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};
-on(“sched-day”,“change”,e=>{state.schedEndDay=Number(e.target.value);renderScheduleOnly();});
-on(“sched-hour”,“change”,e=>{state.schedEndHour=Number(e.target.value);renderScheduleOnly();});
-on(“sched-min”,“change”,e=>{state.schedEndMinute=Number(e.target.value);renderScheduleOnly();});
-on(“sched-ampm”,“change”,e=>{state.schedEndAmpm=e.target.value;renderScheduleOnly();});
-document.querySelectorAll(”[data-dur]”).forEach(el=>el.addEventListener(“input”,e=>{
-const i=Number(e.target.dataset.dur);
-state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
-renderScheduleOnly();
-}));
+  const r = state.recipes.find(r=>r.id===state.selectedId);
+  if (!r) return;
+  const box = document.querySelector(".schedule-box");
+  if (!box) return;
+  const newHtml = renderSchedule(r);
+  const tmp = document.createElement("div");
+  tmp.innerHTML = newHtml;
+  box.replaceWith(tmp.firstElementChild);
+  // Rebind schedule inputs
+  const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};
+  on("sched-day","change",e=>{state.schedEndDay=Number(e.target.value);renderScheduleOnly();});
+  on("sched-hour","change",e=>{state.schedEndHour=Number(e.target.value);renderScheduleOnly();});
+  on("sched-min","change",e=>{state.schedEndMinute=Number(e.target.value);renderScheduleOnly();});
+  on("sched-ampm","change",e=>{state.schedEndAmpm=e.target.value;renderScheduleOnly();});
+  document.querySelectorAll("[data-dur]").forEach(el=>el.addEventListener("input",e=>{
+    const i=Number(e.target.dataset.dur);
+    state.schedDurations[i]=Math.max(1,parseInt(e.target.value)||1);
+    renderScheduleOnly();
+  }));
 }
 
 function renderFormPartial() {
-// Re-render just ingredient and step rows without losing other field values
-syncFormFields();
-const ingContainer = document.getElementById(“ing-rows”);
-const stepContainer = document.getElementById(“step-rows”);
-if (ingContainer) {
-ingContainer.innerHTML = state.form.ingredients.map((ing,i)=>` <div class="ing-form-grid"> <input data-ing="${i}" data-field="name" placeholder="Flour" value="${esc(ing.name)}"/> <input data-ing="${i}" data-field="cups" placeholder="2" value="${esc(ing.cups)}"/> <select data-ing="${i}" data-field="cupsUnit">${CUP_UNITS.map(u=>`<option${ing.cupsUnit===u?” selected”:””}>${u}</option>`).join("")}</select> <input data-ing="${i}" data-field="grams" placeholder="240" value="${esc(ing.grams)}"/> <select data-ing="${i}" data-field="gramsUnit">${GRAM_UNITS.map(u=>`<option${ing.gramsUnit===u?” selected”:””}>${u}</option>`).join("")}</select> <button class="remove-btn" data-remove-ing="${i}">×</button> </div>`).join(””);
-}
-if (stepContainer) {
-stepContainer.innerHTML = state.form.steps.map((s,i)=>` <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px"> <div style="background:var(--accent-light);color:var(--accent);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:11px">${i+1}</div> <textarea data-step="${i}" placeholder="Step ${i+1}…" style="min-height:60px;font-size:14px">${esc(s)}</textarea> <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button> </div>`).join(””);
-}
-// Rebind
-document.querySelectorAll(”[data-ing]”).forEach(el=>{ el.addEventListener(el.tagName===“SELECT”?“change”:“input”,e=>{const i=Number(e.target.dataset.ing),f=e.target.dataset.field;state.form.ingredients[i][f]=e.target.value;}); });
-document.querySelectorAll(”[data-remove-ing]”).forEach(el=>el.addEventListener(“click”,e=>{const i=Number(e.target.dataset.removeIng);state.form.ingredients.splice(i,1);if(!state.form.ingredients.length)state.form.ingredients.push(emptyIng());renderFormPartial();}));
-document.querySelectorAll(”[data-step]”).forEach(el=>el.addEventListener(“input”,e=>{state.form.steps[Number(e.target.dataset.step)]=e.target.value;}));
-document.querySelectorAll(”[data-remove-step]”).forEach(el=>el.addEventListener(“click”,e=>{const i=Number(e.target.dataset.removeStep);state.form.steps.splice(i,1);if(!state.form.steps.length)state.form.steps.push(””);renderFormPartial();}));
+  // Re-render just ingredient and step rows without losing other field values
+  syncFormFields();
+  const ingContainer = document.getElementById("ing-rows");
+  const stepContainer = document.getElementById("step-rows");
+  if (ingContainer) {
+    ingContainer.innerHTML = state.form.ingredients.map((ing,i)=>`
+      <div class="ing-form-grid">
+        <input data-ing="${i}" data-field="name" placeholder="Flour" value="${esc(ing.name)}"/>
+        <input data-ing="${i}" data-field="cups" placeholder="2" value="${esc(ing.cups)}"/>
+        <select data-ing="${i}" data-field="cupsUnit">${CUP_UNITS.map(u=>`<option${ing.cupsUnit===u?" selected":""}>${u}</option>`).join("")}</select>
+        <input data-ing="${i}" data-field="grams" placeholder="240" value="${esc(ing.grams)}"/>
+        <select data-ing="${i}" data-field="gramsUnit">${GRAM_UNITS.map(u=>`<option${ing.gramsUnit===u?" selected":""}>${u}</option>`).join("")}</select>
+        <button class="remove-btn" data-remove-ing="${i}">×</button>
+      </div>`).join("");
+  }
+  if (stepContainer) {
+    stepContainer.innerHTML = state.form.steps.map((s,i)=>`
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
+        <div style="background:var(--accent-light);color:var(--accent);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:11px">${i+1}</div>
+        <textarea data-step="${i}" placeholder="Step ${i+1}…" style="min-height:60px;font-size:14px">${esc(s)}</textarea>
+        <button class="remove-btn" data-remove-step="${i}" style="margin-top:11px">×</button>
+      </div>`).join("");
+  }
+  // Rebind
+  document.querySelectorAll("[data-ing]").forEach(el=>{ el.addEventListener(el.tagName==="SELECT"?"change":"input",e=>{const i=Number(e.target.dataset.ing),f=e.target.dataset.field;state.form.ingredients[i][f]=e.target.value;}); });
+  document.querySelectorAll("[data-remove-ing]").forEach(el=>el.addEventListener("click",e=>{const i=Number(e.target.dataset.removeIng);state.form.ingredients.splice(i,1);if(!state.form.ingredients.length)state.form.ingredients.push(emptyIng());renderFormPartial();}));
+  document.querySelectorAll("[data-step]").forEach(el=>el.addEventListener("input",e=>{state.form.steps[Number(e.target.dataset.step)]=e.target.value;}));
+  document.querySelectorAll("[data-remove-step]").forEach(el=>el.addEventListener("click",e=>{const i=Number(e.target.dataset.removeStep);state.form.steps.splice(i,1);if(!state.form.steps.length)state.form.steps.push("");renderFormPartial();}));
 }
 
 function syncFormFields() {
-const get = id => { const el=document.getElementById(id); return el?el.value:null; };
-const fields = [“title”,“category”,“time”,“tags”,“sourceUrl”];
-fields.forEach(f=>{ const v=get(“f-”+f); if(v!==null) state.form[f]=v; });
-const fav=document.getElementById(“f-fav”); if(fav) state.form.favorite=fav.checked;
+  const get = id => { const el=document.getElementById(id); return el?el.value:null; };
+  const fields = ["title","category","time","tags","sourceUrl"];
+  fields.forEach(f=>{ const v=get("f-"+f); if(v!==null) state.form[f]=v; });
+  const fav=document.getElementById("f-fav"); if(fav) state.form.favorite=fav.checked;
 }
 
 function toggleFav(id) {
-state.recipes = state.recipes.map(r=>r.id===id?{…r,favorite:!r.favorite}:r);
-saveRecipes();
-if(state.selectedId===id) { const r=state.recipes.find(r=>r.id===id); document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>b.textContent=r.favorite?“❤️”:“🤍”); }
-else render();
+  state.recipes = state.recipes.map(r=>r.id===id?{...r,favorite:!r.favorite}:r);
+  saveRecipes();
+  if(state.selectedId===id) { const r=state.recipes.find(r=>r.id===id); document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>b.textContent=r.favorite?"❤️":"🤍"); }
+  else render();
 }
 
 function saveRecipe() {
-syncFormFields();
-const f = state.form;
-if (!f.title.trim()) { showToast(“Please enter a recipe name”); return; }
-const cleaned = {…f, ingredients:f.ingredients.filter(i=>i.name.trim()), steps:f.steps.filter(s=>s.trim())};
-if (state.formMode===“edit”) {
-state.recipes = state.recipes.map(r=>r.id===state.selectedId?{…r,…cleaned}:r);
-saveRecipes(); state.view=“detail”; render(); showToast(“Recipe updated”);
-} else {
-state.recipes = [{…cleaned, id:Date.now()}, …state.recipes];
-saveRecipes(); state.view=“grid”; render(); showToast(“Recipe added”);
-}
+  syncFormFields();
+  const f = state.form;
+  if (!f.title.trim()) { showToast("Please enter a recipe name"); return; }
+  const cleaned = {...f, ingredients:f.ingredients.filter(i=>i.name.trim()), steps:f.steps.filter(s=>s.trim())};
+  if (state.formMode==="edit") {
+    state.recipes = state.recipes.map(r=>r.id===state.selectedId?{...r,...cleaned}:r);
+    saveRecipes(); state.view="detail"; render(); showToast("Recipe updated");
+  } else {
+    state.recipes = [{...cleaned, id:Date.now()}, ...state.recipes];
+    saveRecipes(); state.view="grid"; render(); showToast("Recipe added");
+  }
 }
 
 async function doImport() {
-const urlEl = document.getElementById(“import-url”);
-const url = urlEl ? urlEl.value.trim() : “”;
-if (!url) return;
-state.importing=true; state.importError=””; state.importUrl=url;
-render();
-try {
-const prompt = `You are a recipe extraction assistant. Use web search to fetch and read the content at this URL, then extract the recipe and return ONLY a raw JSON object (no markdown, no backticks, no explanation).
+  const urlEl = document.getElementById("import-url");
+  const url = urlEl ? urlEl.value.trim() : "";
+  if (!url) return;
+  state.importing=true; state.importError=""; state.importUrl=url;
+  render();
+  try {
+    const prompt = `You are a recipe extraction assistant. Use web search to fetch and read the content at this URL, then extract the recipe and return ONLY a raw JSON object (no markdown, no backticks, no explanation).
 
 URL: ${url}
 
 Return exactly this structure:
-{“title”:“Recipe name”,“category”:“One of: Breakfast,Lunch,Dinner,Dessert,Snacks,Drinks,Soups,Salads,Baking,Sourdough,Other”,“tags”:“comma-separated tags”,“time”:“e.g. 45m”,“emoji”:“single emoji”,“ingredients”:[{“name”:””,“cups”:””,“cupsUnit”:“cup”,“grams”:””,“gramsUnit”:“g”}],“steps”:[“Step 1”,“Step 2”]}
+{"title":"Recipe name","category":"One of: Breakfast,Lunch,Dinner,Dessert,Snacks,Drinks,Soups,Salads,Baking,Sourdough,Other","tags":"comma-separated tags","time":"e.g. 45m","emoji":"single emoji","ingredients":[{"name":"","cups":"","cupsUnit":"cup","grams":"","gramsUnit":"g"}],"steps":["Step 1","Step 2"]}
 
 Convert all ingredient amounts to both cups/tbsp/tsp AND grams/ml.`;
 
-```
-const response = await fetch("https://api.anthropic.com/v1/messages", {
-  method:"POST",
-  headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
-  body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:prompt}]})
-});
-if (!response.ok) { const e=await response.json().catch(()=>({})); throw new Error(e.error?.message||`Error ${response.status}`); }
-const data = await response.json();
-const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
-const clean = text.replace(/```json|```/g,"").trim();
-const start=clean.indexOf("{"), end=clean.lastIndexOf("}");
-if(start===-1||end===-1) throw new Error("No JSON found");
-const parsed = JSON.parse(clean.slice(start,end+1));
-state.form = {...emptyForm(), ...parsed, sourceUrl:url, ingredients:parsed.ingredients?.length?parsed.ingredients:[emptyIng()], steps:parsed.steps?.length?parsed.steps:[""], favorite:false};
-state.importUrl=""; state.importError=""; state.importing=false;
-render(); showToast("Recipe imported — review and save ✓");
-```
-
-} catch(e) {
-state.importError=“Couldn’t import that URL. Try another or fill in manually.”;
-state.importing=false; render();
-}
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:prompt}]})
+    });
+    if (!response.ok) { const e=await response.json().catch(()=>({})); throw new Error(e.error?.message||`Error ${response.status}`); }
+    const data = await response.json();
+    const text = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    const clean = text.replace(/```json|```/g,"").trim();
+    const start=clean.indexOf("{"), end=clean.lastIndexOf("}");
+    if(start===-1||end===-1) throw new Error("No JSON found");
+    const parsed = JSON.parse(clean.slice(start,end+1));
+    state.form = {...emptyForm(), ...parsed, sourceUrl:url, ingredients:parsed.ingredients?.length?parsed.ingredients:[emptyIng()], steps:parsed.steps?.length?parsed.steps:[""], favorite:false};
+    state.importUrl=""; state.importError=""; state.importing=false;
+    render(); showToast("Recipe imported — review and save ✓");
+  } catch(e) {
+    state.importError="Couldn't import that URL. Try another or fill in manually.";
+    state.importing=false; render();
+  }
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 state.recipes = loadRecipes();
 render();
 </script>
-
 </body>
 </html>
